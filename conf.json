@@ -1,0 +1,28 @@
+{
+  "timeoutInRounds": 10000,
+  "maxPlayer": 5,
+  "timeAfterRound": 1000,
+  "columns": 40,
+  "rows": 20,
+  "spaceStationHq": 400,
+  "SpaceStationDamage" : "2w20+4",
+  "spaceStationAttackRange" : 3,
+  "spaceStations": [
+    {
+      "xCoordinate" : 1,
+      "yCoordinate" : 1
+    },
+    {
+      "xCoordinate" : 38,
+      "yCoordinate" : 1
+    },
+    {
+      "xCoordinate" : 1,
+      "yCoordinate" : 18
+    },
+    {
+      "xCoordinate" : 38,
+      "yCoordinate" : 18
+    }
+  ]
+}
