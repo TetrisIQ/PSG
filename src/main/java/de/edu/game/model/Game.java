@@ -4,8 +4,7 @@ import de.edu.game.config.loader.ConfigLoader;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
@@ -25,6 +24,7 @@ public class Game {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<User> users = new LinkedList<>();
+    private int userTurnIndex = 0;
 
     @OneToOne
     private Map map;
@@ -44,12 +44,10 @@ public class Game {
      */
     public boolean registerUser(User user) {
         if (!state.isGameStarted()) {
-            boolean ret = this.users.add(user);
-            return ret;
+            return this.users.add(user);
         }
         return false;
     }
-
     /**
      * Starts the Game
      *
@@ -62,23 +60,26 @@ public class Game {
     private boolean setupGame() {
         this.map = new Map(ConfigLoader.shared.getRows(), ConfigLoader.shared.getColumns());
         this.spawnSpaceStations();
-
-
+        Collections.shuffle(users);
+        this.currentPlayer().next();
         return true;
+    }
+
+    private User currentPlayer() {
+        return this.users.get(this.userTurnIndex);
     }
 
     private void spawnSpaceStations() {
         int i = 0;
         for (User user : users) {
             // Spawn users Space Station
-            System.out.println(ConfigLoader.shared.getSpaceStations());
             Field field = this.map.findCoordinate(ConfigLoader.shared.getSpaceStations().get(i).getXCoordinate(), ConfigLoader.shared.getSpaceStations().get(i).getYCoordinate());
-            SpaceStation spaceStation = new SpaceStation(this.map, user.getUsername(), field.getCoordinate(), "SpaceStation", user.getColor());
+            SpaceStation spaceStation = new SpaceStation(this.map, user.getUsername(), field, "SpaceStation", user.getColor());
             user.setSpaceStation(spaceStation);
             field.setMeeple(spaceStation);
-            spaceStation.spawnStarfighter(user);
-            spaceStation.spawnTransporter(user);
-            spaceStation.spawnTransporter(user);
+            spaceStation.spawnStarfighter(map, user);
+            spaceStation.spawnTransporter(map, user);
+            spaceStation.spawnTransporter(map, user);
             i++;
         }
     }
@@ -93,8 +94,16 @@ public class Game {
         return state.toString().equals("Ready");
     }
 
-    public String getFildInfo(User user) {
-        return "";
+    public Set<Field> getFildInfo(User user) {
+        List<AbstractMeeple> ls = user.getMeepleList();
+        List<Field> returnList = new LinkedList<>();
+        ls.add(user.getSpaceStation());
+        for(AbstractMeeple meeple : ls) {
+
+            returnList.addAll(meeple.getFieldsAround(this.map, this.map.findCoordinate(meeple.getField().getCoordinate().getXCoordinate(), meeple.getField().getCoordinate().getYCoordinate())));
+            returnList.add(meeple.getField(this.map));
+        }
+        return new HashSet<>(returnList);
     }
 
     public boolean isGameStarted() {

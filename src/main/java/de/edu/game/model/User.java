@@ -27,10 +27,10 @@ public class User {
 
 	private String username;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private SpaceStation spaceStation;
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	private transient List<AbstractMeeple> meepleList = new LinkedList<>();
 
 	@OneToOne(cascade = CascadeType.ALL)
@@ -50,7 +50,7 @@ public class User {
 
 
     public boolean myTurn() {
-		return state.toString().equals("MYTURN");
+		return state.isMyturn();
     }
 
 	public boolean addMeeple(AbstractMeeple meeple) {
@@ -59,5 +59,9 @@ public class User {
 			return false;
 		}
 		return this.meepleList.add(meeple);
+	}
+
+	public void next() {
+		this.state.nextState();
 	}
 }

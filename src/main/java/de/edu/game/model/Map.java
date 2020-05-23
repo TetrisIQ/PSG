@@ -4,10 +4,8 @@ import de.edu.game.config.loader.ConfigLoader;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import sun.awt.image.ImageWatched;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,8 +33,23 @@ public class Map {
     }
 
     public Field findCoordinate(int x, int y) {
-        //TODO: index out of bounce, goto bottom of the map
-        return rows.get(y).getFields().get(x);
+        try {
+            return rows.get(y).getFields().get(x);
+        } catch (NullPointerException nullPointerException) {
+            if (x < 0) {
+                x = ConfigLoader.shared.getColumns() - 1;
+            }
+            if (x >= ConfigLoader.shared.getColumns()) {
+                x = 0;
+            }
+            if (y < 0) {
+                y = ConfigLoader.shared.getRows() - 1;
+            }
+            if (y > ConfigLoader.shared.getRows()) {
+                y = 0;
+            }
+            return findCoordinate(x, y);
+        }
     }
 
 }

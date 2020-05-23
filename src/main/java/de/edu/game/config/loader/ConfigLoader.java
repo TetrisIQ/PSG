@@ -24,6 +24,8 @@ public class ConfigLoader {
             //String path = new File("src/main/resources/conf.json").getAbsolutePath();
             final String path = new File("conf.json").getAbsolutePath();
             final ConfigLoader conf = gson.fromJson(new FileReader(path), ConfigLoader.class);
+            // shuffle start positions
+            Collections.shuffle(conf.getSpaceStations());
             shared = conf;
         } catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
             e.printStackTrace();

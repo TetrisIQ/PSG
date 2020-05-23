@@ -11,8 +11,8 @@ import javax.persistence.Id;
 @NoArgsConstructor
 public class Starfighter extends AbstractMeeple {
 
-    public Starfighter(Map map, String username, Coordinate coordinate, String name, String color) {
-        super(map, username, coordinate, name, color);
+    public Starfighter(String username, Field field, String name, String color) {
+        super(username, field, name, color);
         this.setAttackRange(1);
         this.setDamage("1w20"); //TODO: load via Config
 
@@ -21,7 +21,13 @@ public class Starfighter extends AbstractMeeple {
 
     @Override
     public boolean move(Field newPos) {
-        return false;
+        if(newPos.isEmpty()) {
+            this.getField().setEmpty();
+            newPos.setMeeple(this);
+        }else {
+            this.attack(newPos);
+        }
+        return true;
     }
 
     @Override

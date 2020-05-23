@@ -28,14 +28,19 @@ public class UserState {
                 this.state = UserStates.READY;
                 break;
             case READY:
-                this.state = UserStates.WAITING;
-                break;
             case WAITING:
                 this.state = UserStates.MYTURN;
+                break;
+            case MYTURN:
+                this.state = UserStates.WAITING;
                 break;
             default:
                 this.state = UserStates.INVALID;
         }
+    }
+
+    boolean isMyturn() {
+        return this.state.equals(UserStates.MYTURN);
     }
 
     @Override

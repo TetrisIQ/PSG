@@ -1,5 +1,6 @@
 package de.edu.game.model;
 
+import com.google.gson.annotations.Expose;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,5 +38,9 @@ public class Field {
 
     public boolean isEmpty() {
         return meeple == null;
+    }
+
+    public void setEmpty() {
+        this.meeple = null;
     }
 }

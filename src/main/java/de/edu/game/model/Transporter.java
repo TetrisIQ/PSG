@@ -3,20 +3,23 @@ package de.edu.game.model;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 @Entity
 @NoArgsConstructor
 public class Transporter extends AbstractMeeple {
 
-    public Transporter(Map map, String username, Coordinate coordinate, String name, String color) {
-        super(map, username, coordinate, name, color);
+    public Transporter(String username, Field field, String name, String color) {
+        super(username, field, name, color);
     }
 
     @Override
     public boolean move(Field newPos) {
+        if(newPos.isEmpty()) {
+            this.getField().setEmpty();
+            newPos.setMeeple(this);
+
+            return true;
+        }
         return false;
     }
 

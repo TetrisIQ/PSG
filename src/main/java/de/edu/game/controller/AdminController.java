@@ -1,12 +1,13 @@
 package de.edu.game.controller;
 
-import com.google.gson.Gson;
+import de.edu.game.controller.responses.MapResponse;
 import de.edu.game.exceptions.GameAlreadyStartedException;
 import de.edu.game.model.Game;
 import de.edu.game.model.Map;
 import de.edu.game.repositorys.GameRepository;
 import de.edu.game.repositorys.MapRepository;
 import de.edu.game.repositorys.MeepleRepository;
+import de.edu.game.repositorys.UserRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,9 @@ public class AdminController {
     @Autowired
     private MeepleRepository meepleRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PutMapping("/start")
     @ResponseStatus(code = HttpStatus.OK)
     //@PreAuthorize("hasRole('root')")
@@ -46,16 +50,13 @@ public class AdminController {
     }
 
     @GetMapping("/map")
-    public String getMap() {
-        //TODO: configure Spring to use the builtin JSON Parsing
-        //Currently there are some issues,
-        //There rows are empty
-        //This should be a Temporary workaround
+    public MapResponse getMap() {
         try {
             Map map = mapRepository.getTheMap();
-            return new Gson().toJson(map);
+            return new MapResponse(map);
+            //return map;
         } catch (IndexOutOfBoundsException ex) {
-            return "Game not Started";
+            return null;
         }
     }
 
