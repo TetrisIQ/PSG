@@ -64,7 +64,7 @@ public class SpaceStation extends AbstractMeeple {
     }
 
     @Override
-    public boolean move(Field newPos) {
+    public boolean move(Map map, Field newPos) {
         return false;
     }
 

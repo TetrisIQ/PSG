@@ -23,4 +23,8 @@ public class Coordinate {
     private int xCoordinate;
     private int yCoordinate;
 
+    @Override
+    public String toString() {
+        return this.xCoordinate + " " + this.yCoordinate;
+    }
 }

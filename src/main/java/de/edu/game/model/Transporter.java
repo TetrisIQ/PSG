@@ -13,13 +13,27 @@ public class Transporter extends AbstractMeeple {
     }
 
     @Override
-    public boolean move(Field newPos) {
-        if(newPos.isEmpty()) {
-            this.getField().setEmpty();
-            newPos.setMeeple(this);
-
+    public boolean move(Map map, Field newPos) {
+        if (isHasMoved()) {
+            // can only move on field per Round
+            return false;
+        }
+        //checks if the Coordinate of the new Position is next to the meeple
+        if (this.canMove(map, newPos)) {
+            //check if new Position is empty
+            if (newPos.isEmpty()) {
+                this.getField().setEmpty();
+                newPos.setMeeple(this);
+                this.setField(newPos);
+            } else {
+                //if Position is not empty, a Transporter will not attack
+                this.setHasMoved(false);
+                return false;
+            }
+            this.setHasMoved(true);
             return true;
         }
+        this.setHasMoved(false);
         return false;
     }
 

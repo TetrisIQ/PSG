@@ -3,6 +3,7 @@ package de.edu.game.controller;
 import de.edu.game.config.UserService;
 import de.edu.game.controller.responses.FieldResponse;
 import de.edu.game.model.*;
+import de.edu.game.repositorys.FieldRepository;
 import de.edu.game.repositorys.GameRepository;
 import de.edu.game.repositorys.MapRepository;
 import de.edu.game.repositorys.MeepleRepository;
@@ -31,7 +32,10 @@ public class GameController {
     private MapRepository mapRepository;
 
     @Autowired
-    MeepleRepository meepleRepository;
+    private FieldRepository fieldRepository;
+
+    @Autowired
+    private MeepleRepository meepleRepository;
 
     @Autowired
     private UserService userService;
@@ -78,15 +82,15 @@ public class GameController {
 
     @PutMapping("{meepleId}/{x}/{y}")
     public void Move(@PathVariable int meepleId, @PathVariable int x, @PathVariable int y) throws Exception {
-        System.out.println(meepleId + " sould move to:" + x + "/" + y);
         Optional<AbstractMeeple> meeple = meepleRepository.findById(meepleId);
+        System.out.println(meepleId + " sould move frome "+ meeple.get().getField().getCoordinate() +" to: " + x + "/" + y);
         Optional<User> loggedIn = userService.currentUser();
         Map map = mapRepository.getTheMap();
         if (loggedIn.isPresent() && meeple.isPresent()) {
-            if (meeple.get().move(map.findCoordinate(x, y))) {
-                System.out.println("Moved");
+            if (meeple.get().move(map, map.findCoordinate(x, y))) {
             } else {
-                throw new Exception("Illegal move");
+                //TODO: improve illegal moves by different Exceptions
+                throw new Exception("illegal move");
             }
             meepleRepository.save(meeple.get());
             mapRepository.save(map);

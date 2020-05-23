@@ -4,6 +4,7 @@ import de.edu.game.config.loader.ConfigLoader;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.extern.java.Log;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Getter
+@Log
 public class Map {
 
     @Id
@@ -36,20 +38,24 @@ public class Map {
         try {
             return rows.get(y).getFields().get(x);
         } catch (NullPointerException nullPointerException) {
-            if (x < 0) {
-                x = ConfigLoader.shared.getColumns() - 1;
-            }
-            if (x >= ConfigLoader.shared.getColumns()) {
-                x = 0;
-            }
-            if (y < 0) {
-                y = ConfigLoader.shared.getRows() - 1;
-            }
-            if (y > ConfigLoader.shared.getRows()) {
-                y = 0;
-            }
-            return findCoordinate(x, y);
+            log.info("NullPointer Overflow");
         }
+        catch (ArrayIndexOutOfBoundsException ex) {
+            log.info("ArrayIndexOutOfBounds overflow");
+        }
+        if (x < 0) {
+            x = ConfigLoader.shared.getColumns() - 1;
+        }
+        if (x >= ConfigLoader.shared.getColumns()) {
+            x = 0;
+        }
+        if (y < 0) {
+            y = ConfigLoader.shared.getRows() - 1;
+        }
+        if (y > ConfigLoader.shared.getRows()) {
+            y = 0;
+        }
+        return findCoordinate(x, y);
     }
 
 }

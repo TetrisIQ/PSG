@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -35,6 +37,8 @@ public abstract class AbstractMeeple {
 
     private int attackRange;
 
+    private boolean hasMoved;
+
     public AbstractMeeple(String username, Field field, String name, String color) {
         this.field = field;
         this.name = name;
@@ -44,6 +48,11 @@ public abstract class AbstractMeeple {
 
     public Field getField(Map map) {
         return map.findCoordinate(field.getCoordinate().getXCoordinate(), field.getCoordinate().getYCoordinate());
+    }
+
+    public boolean canMove(Map map, Field newField) {
+        Set<Field> set = new HashSet<>(getFieldsAround(map, this.getField()));
+        return set.contains(newField);
     }
 
     public List<Field> getFieldsAround(Map map, Field field) {
@@ -68,7 +77,7 @@ public abstract class AbstractMeeple {
         return returnList;
     }
 
-    abstract public boolean move(Field newPos);
+    abstract public boolean move(Map map, Field newPos);
 
     abstract public int nextPossibleMoves();
 
