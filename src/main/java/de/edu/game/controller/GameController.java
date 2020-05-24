@@ -2,18 +2,18 @@ package de.edu.game.controller;
 
 import de.edu.game.config.UserService;
 import de.edu.game.controller.responses.FieldResponse;
+import de.edu.game.exceptions.CannotMoveException;
+import de.edu.game.exceptions.HasAlreadyMovedException;
+import de.edu.game.exceptions.NotYourTurnException;
+import de.edu.game.exceptions.SpaceStationCannotMoveException;
 import de.edu.game.model.*;
-import de.edu.game.repositorys.FieldRepository;
-import de.edu.game.repositorys.GameRepository;
-import de.edu.game.repositorys.MapRepository;
-import de.edu.game.repositorys.MeepleRepository;
+import de.edu.game.repositorys.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -24,6 +24,9 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/game")
 @Log
 public class GameController {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private GameRepository gameRepository;
@@ -52,12 +55,14 @@ public class GameController {
         return ret;
     }
 
-    private boolean isMyTurn(User user) {
-        while (!user.myTurn()) {
-
-        }
-        if(user.myTurn()){
-            return true;
+    private boolean isMyTurn(UserRepository userRepository, int id) throws InterruptedException {
+        boolean stop = false;
+        while (!stop) {
+            if (userRepository.findById(id).get().myTurn()) {
+                stop = true;
+                return true;
+            }
+            TimeUnit.SECONDS.sleep(2);
         }
         return false;
     }
@@ -69,8 +74,8 @@ public class GameController {
         DeferredResult<HttpStatus> deferredResult = new DeferredResult<>(timeOutInMilliSec, HttpStatus.BAD_REQUEST);
         CompletableFuture.runAsync(() -> {
             try {
-                //Long pooling task;If task is not completed within 100 sec timeout response retrun for this request
-                if(this.isMyTurn(user)) {
+                //Long pooling task;If task is not completed within 100 sec timeout response return for this request
+                if(this.isMyTurn(userRepository, user.getId())) {
                     deferredResult.setResult(HttpStatus.OK);
                 }
             } catch (Exception ex) {
@@ -80,8 +85,25 @@ public class GameController {
         return deferredResult;
     }
 
-    @PutMapping("{meepleId}/{x}/{y}")
-    public void Move(@PathVariable int meepleId, @PathVariable int x, @PathVariable int y) throws Exception {
+    @PutMapping("/endturn")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void finishTurn() throws NotYourTurnException {
+        User user = userService.currentUser().get();
+        Game game = gameRepository.getTheGame();
+        if(user.finishTurn()) {
+            log.info("Next Player");
+            User next = game.nextPlayer();
+            next.next();
+            userRepository.save(user);
+            userRepository.save(next);
+           // meepleRepository.saveAll(test.getMeepleList());
+        } else {
+            throw new NotYourTurnException();
+        }
+    }
+
+    @PutMapping("/{meepleId}/{x}/{y}")
+    public void move(@PathVariable int meepleId, @PathVariable int x, @PathVariable int y) throws CannotMoveException, HasAlreadyMovedException, SpaceStationCannotMoveException {
         Optional<AbstractMeeple> meeple = meepleRepository.findById(meepleId);
         System.out.println(meepleId + " sould move frome "+ meeple.get().getField().getCoordinate() +" to: " + x + "/" + y);
         Optional<User> loggedIn = userService.currentUser();
@@ -89,8 +111,7 @@ public class GameController {
         if (loggedIn.isPresent() && meeple.isPresent()) {
             if (meeple.get().move(map, map.findCoordinate(x, y))) {
             } else {
-                //TODO: improve illegal moves by different Exceptions
-                throw new Exception("illegal move");
+                throw new CannotMoveException();
             }
             meepleRepository.save(meeple.get());
             mapRepository.save(map);

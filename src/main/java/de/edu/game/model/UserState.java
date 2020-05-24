@@ -22,20 +22,21 @@ public class UserState {
     private UserStates state = UserStates.REGISTER;
 
 
-    public void nextState() {
+    public boolean nextState() {
         switch (this.state) {
             case REGISTER:
                 this.state = UserStates.READY;
-                break;
+                return true;
             case READY:
             case WAITING:
                 this.state = UserStates.MYTURN;
-                break;
+                return true;
             case MYTURN:
                 this.state = UserStates.WAITING;
-                break;
+                return true;
             default:
                 this.state = UserStates.INVALID;
+                return false;
         }
     }
 

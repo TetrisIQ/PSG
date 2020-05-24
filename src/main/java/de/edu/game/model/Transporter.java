@@ -1,5 +1,6 @@
 package de.edu.game.model;
 
+import de.edu.game.exceptions.HasAlreadyMovedException;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -13,10 +14,10 @@ public class Transporter extends AbstractMeeple {
     }
 
     @Override
-    public boolean move(Map map, Field newPos) {
+    public boolean move(Map map, Field newPos) throws HasAlreadyMovedException {
         if (isHasMoved()) {
             // can only move on field per Round
-            return false;
+            throw new HasAlreadyMovedException();
         }
         //checks if the Coordinate of the new Position is next to the meeple
         if (this.canMove(map, newPos)) {
@@ -27,7 +28,7 @@ public class Transporter extends AbstractMeeple {
                 this.setField(newPos);
             } else {
                 //if Position is not empty, a Transporter will not attack
-                this.setHasMoved(false);
+                this.setHasMoved(false); // The transporter can move to an other field
                 return false;
             }
             this.setHasMoved(true);

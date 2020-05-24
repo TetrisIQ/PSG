@@ -25,7 +25,7 @@ public class Map {
     private List<Row> rows = new LinkedList<>();
 
     /*@ManyToMany
-    private List<AbstractMeeple> meeples = new LinkedList<>();
+   Benötigt private List<AbstractMeeple> meeples = new LinkedList<>();
      */
 
     public Map(int rows, int columns) {
@@ -37,25 +37,45 @@ public class Map {
     public Field findCoordinate(int x, int y) {
         try {
             return rows.get(y).getFields().get(x);
-        } catch (NullPointerException nullPointerException) {
-            log.info("NullPointer Overflow");
+        } catch (Exception ex) {
+            StringBuilder sb = new StringBuilder(); // TODO: evaluate if this overhead is necessary
+            sb.append(ex.toString()).append("\toverflow, fixing indexing \t[ ");
+            int xOld = x;
+            int yOld = y;
+            // Fixing indexing
+            if (x < 0) {
+                sb.append("x").append(x).append("->");
+                x = ConfigLoader.shared.getColumns() - 1;
+                sb.append(x).append(" ");
+            }
+            if (x >= ConfigLoader.shared.getColumns()) {
+                sb.append("x").append(x).append("->");
+                x = 0;
+                sb.append(x).append(" ");
+            }
+            if (y < 0) {
+                sb.append("y").append(x).append("->");
+                y = ConfigLoader.shared.getRows() - 1;
+                sb.append(y).append(" ");
+            }
+            if (y >= ConfigLoader.shared.getRows()) {
+                sb.append("y").append(x).append("->");
+                y = 0;
+                sb.append(y).append(" ");
+            }
+            sb.append("]");
+            log.config(sb.toString());
+            //recursive call with fixed parameters
+            if (xOld != x || yOld != y) {
+                return findCoordinate(x, y);
+            } else {
+                // this could not be possible!
+                log.warning("Fatal Error in Map.findCoordinate()! " + x + "/" + y);
+                ex.printStackTrace();
+                System.exit(-1);
+                return null;
+            }
         }
-        catch (ArrayIndexOutOfBoundsException ex) {
-            log.info("ArrayIndexOutOfBounds overflow");
-        }
-        if (x < 0) {
-            x = ConfigLoader.shared.getColumns() - 1;
-        }
-        if (x >= ConfigLoader.shared.getColumns()) {
-            x = 0;
-        }
-        if (y < 0) {
-            y = ConfigLoader.shared.getRows() - 1;
-        }
-        if (y > ConfigLoader.shared.getRows()) {
-            y = 0;
-        }
-        return findCoordinate(x, y);
     }
 
 }

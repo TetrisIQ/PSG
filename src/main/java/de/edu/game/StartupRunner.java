@@ -38,12 +38,24 @@ public class StartupRunner implements CommandLineRunner {
 
         // Create Default Game
         gameRepository.save(new Game());
-        log.info("Default game Created, with id: "+ gameRepository.getTheGame().toString());
+        log.info("Default game Created, with id: " + gameRepository.getTheGame().toString());
+
+        try {
+            String[] cmd = {"/usr/bin/notify-send",
+                    "Server Ready"};
+            Runtime.getRuntime().exec(cmd);
+        } catch (Exception ex) {
+            //ignore, if the notification will not send its no big deal
+        }
+
+
     }
 
 
     public static String generateString() {
         String uuid = UUID.randomUUID().toString();
-        return uuid.replace("-", "");
+        //return uuid.replace("-", "");
+        //TODO: Testing is easier if we return the same password
+        return "7b13984732384f60854f0fe451d01241";
     }
 }

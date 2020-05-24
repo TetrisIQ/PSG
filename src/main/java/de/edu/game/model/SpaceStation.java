@@ -1,6 +1,7 @@
 package de.edu.game.model;
 
 import de.edu.game.config.loader.ConfigLoader;
+import de.edu.game.exceptions.SpaceStationCannotMoveException;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -64,8 +65,8 @@ public class SpaceStation extends AbstractMeeple {
     }
 
     @Override
-    public boolean move(Map map, Field newPos) {
-        return false;
+    public boolean move(Map map, Field newPos) throws SpaceStationCannotMoveException {
+        throw new SpaceStationCannotMoveException();
     }
 
     @Override

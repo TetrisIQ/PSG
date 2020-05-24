@@ -74,7 +74,7 @@ public class UserController {
         Game game = gameRepository.getTheGame();
         if (game.registerUser(user)) {
             gameRepository.save(game);
-            log.info(user.getUsername() + " joined the Game");
+            log.info(user.getUsername() + " (" + user.getId() + ") joined the Game");
         } else  {
             // game is started, cannot Join a running Game
             throw new GameAlreadyStartedException();

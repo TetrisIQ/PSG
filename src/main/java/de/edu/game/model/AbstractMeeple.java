@@ -1,7 +1,8 @@
 package de.edu.game.model;
 
-import com.google.gson.annotations.Expose;
-import lombok.Data;
+import de.edu.game.exceptions.CannotMoveException;
+import de.edu.game.exceptions.HasAlreadyMovedException;
+import de.edu.game.exceptions.SpaceStationCannotMoveException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -77,11 +78,11 @@ public abstract class AbstractMeeple {
         return returnList;
     }
 
-    abstract public boolean move(Map map, Field newPos);
+    abstract public boolean move(Map map, Field newPos) throws HasAlreadyMovedException, SpaceStationCannotMoveException, CannotMoveException;
 
     abstract public int nextPossibleMoves();
 
-    abstract public void attack(Field pos);
+    abstract public void attack(Field pos) throws CannotMoveException;
 
     @Override
     public String toString() {

@@ -2,12 +2,14 @@ package de.edu.game.model;
 
 import de.edu.game.config.loader.ConfigLoader;
 import lombok.Getter;
+import lombok.extern.java.Log;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
 @Getter
+@Log
 public class Game {
 
     // ############### Parameter ###############
@@ -24,6 +26,7 @@ public class Game {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<User> users = new LinkedList<>();
+
     private int userTurnIndex = 0;
 
     @OneToOne
@@ -48,6 +51,7 @@ public class Game {
         }
         return false;
     }
+
     /**
      * Starts the Game
      *
@@ -62,11 +66,24 @@ public class Game {
         this.spawnSpaceStations();
         Collections.shuffle(users);
         this.currentPlayer().next();
+        log.info(this.currentPlayer().getUsername() + " starts the Game");
         return true;
     }
 
     private User currentPlayer() {
         return this.users.get(this.userTurnIndex);
+    }
+
+    public User nextPlayer() {
+        userTurnIndex++;
+        try {
+            return currentPlayer();
+        } catch (Exception ex) {
+            //last player in list
+            //Round finished
+            this.userTurnIndex = 0;
+            return currentPlayer();
+        }
     }
 
     private void spawnSpaceStations() {
@@ -98,8 +115,7 @@ public class Game {
         List<AbstractMeeple> ls = user.getMeepleList();
         List<Field> returnList = new LinkedList<>();
         ls.add(user.getSpaceStation());
-        for(AbstractMeeple meeple : ls) {
-
+        for (AbstractMeeple meeple : ls) {
             returnList.addAll(meeple.getFieldsAround(this.map, this.map.findCoordinate(meeple.getField().getCoordinate().getXCoordinate(), meeple.getField().getCoordinate().getYCoordinate())));
             returnList.add(meeple.getField(this.map));
         }
@@ -115,4 +131,6 @@ public class Game {
     public String toString() {
         return this.id + "";
     }
+
+
 }
