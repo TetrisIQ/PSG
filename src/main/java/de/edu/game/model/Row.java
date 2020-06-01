@@ -18,7 +18,7 @@ public class Row {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Field> fields = new LinkedList<>();
 
     public Row(int y, int length) {

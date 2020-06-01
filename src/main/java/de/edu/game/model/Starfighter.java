@@ -1,6 +1,8 @@
 package de.edu.game.model;
 
-import de.edu.game.exceptions.CannotMoveException;
+import de.edu.game.config.loader.ConfigLoader;
+import de.edu.game.exceptions.CannotAttackOwnMeeplesException;
+import de.edu.game.exceptions.CannotMoveButIAttackException;
 import de.edu.game.exceptions.HasAlreadyMovedException;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +21,7 @@ public class Starfighter extends AbstractMeeple {
 
 
     @Override
-    public boolean move(Map map, Field newPos) throws HasAlreadyMovedException, CannotMoveException {
+    public boolean move(Map map, Field newPos) throws HasAlreadyMovedException, CannotMoveButIAttackException, CannotAttackOwnMeeplesException {
         if (isHasMoved()) {
             throw new HasAlreadyMovedException();
         }
@@ -41,14 +43,36 @@ public class Starfighter extends AbstractMeeple {
     }
 
     @Override
-    public int nextPossibleMoves() {
-        return 0;
-    }
+    public void attack(Field pos) throws CannotMoveButIAttackException, CannotAttackOwnMeeplesException {
+        // Creating Dices for me and the enemy
+        AbstractMeeple enemy = pos.getMeeple();
+        if (enemy.getUsername().equals(this.getUsername())) {
+            // cannot attack my meeples
+            throw new CannotAttackOwnMeeplesException();
+        }
+        Dice myDice = new Dice(this.getDamage());
+        Dice enemyDice = new Dice(enemy.getDefense());
+        int attack = myDice.throwDice();
+        int defence = enemyDice.throwDice();
 
-    @Override
-    public void attack(Field pos) throws CannotMoveException {
-        throw new CannotMoveException();
-        //TODO: implement attack
+        // Exception for SpaceStations
+        if (enemy.getName().equals(ConfigLoader.shared.getSpaceStation().getName())) {
+            //A SpaceStations has no defence value, they cannot avoid damage
+            enemy.makeDamage(attack);
+            this.makeDamage(defence);
+        } else { // this should be the default case
+            int hpEnemy = enemy.makeDamage(attack - defence);
+            if (hpEnemy <= 0) {
+                // enemy destroyed we can move to the field
+                this.getField().setEmpty();
+                pos.setMeeple(this);
+                this.setField(pos);
+            } else {
+                // enemy not destroyed, we must attack again.
+                throw new CannotMoveButIAttackException();
+
+            }
+        }
 
     }
 }

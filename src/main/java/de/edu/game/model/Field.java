@@ -1,9 +1,7 @@
 package de.edu.game.model;
 
-import com.google.gson.annotations.Expose;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -16,24 +14,20 @@ public class Field {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Coordinate coordinate;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private AbstractMeeple meeple;
+
+    // #### Constructors
     public Field(int x, int y) {
         this.coordinate = new Coordinate(0, x, y);
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private AbstractMeeple meeple;
-
+    // #### Setter
     public void setMeeple(AbstractMeeple meeple) {
         this.meeple = meeple;
-    }
-
-
-    @Override
-    public String toString() {
-        return "[" + coordinate.getXCoordinate() + "/" + coordinate.getYCoordinate() + "-" + meeple + "]";
     }
 
     public boolean isEmpty() {
@@ -42,5 +36,10 @@ public class Field {
 
     public void setEmpty() {
         this.meeple = null;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + coordinate.getXCoordinate() + "/" + coordinate.getYCoordinate() + "-" + meeple + "]";
     }
 }

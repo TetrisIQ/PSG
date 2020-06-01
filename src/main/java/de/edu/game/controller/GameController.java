@@ -2,12 +2,10 @@ package de.edu.game.controller;
 
 import de.edu.game.config.UserService;
 import de.edu.game.controller.responses.FieldResponse;
-import de.edu.game.exceptions.CannotMoveException;
-import de.edu.game.exceptions.HasAlreadyMovedException;
-import de.edu.game.exceptions.NotYourTurnException;
-import de.edu.game.exceptions.SpaceStationCannotMoveException;
+import de.edu.game.exceptions.*;
 import de.edu.game.model.*;
 import de.edu.game.repositorys.*;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequestMapping("/game")
@@ -45,11 +44,11 @@ public class GameController {
 
     @GetMapping
     private Set<FieldResponse> getMapInformation() throws InterruptedException {
+        //TODO: Sometimes the meeples are missing
         Game game = gameRepository.getTheGame();
         User user = userService.currentUser().get();
         Set<FieldResponse> ret = new HashSet<>();
         if (user.myTurn()) {
-            Set<Field> test = game.getFildInfo(user);
             game.getFildInfo(user).forEach(f -> ret.add(new FieldResponse(f)));
         }
         return ret;
@@ -68,10 +67,10 @@ public class GameController {
     }
 
     @GetMapping("/myturn")
-    public DeferredResult<HttpStatus> isMyTurn() {
+    public DeferredResult<HttpStatus> isMyTurn() throws TimeoutException {
         Long timeOutInMilliSec = 100000L;
         User user = userService.currentUser().get();
-        DeferredResult<HttpStatus> deferredResult = new DeferredResult<>(timeOutInMilliSec, HttpStatus.BAD_REQUEST);
+        DeferredResult<HttpStatus> deferredResult = new DeferredResult<>(timeOutInMilliSec, HttpStatus.REQUEST_TIMEOUT);
         CompletableFuture.runAsync(() -> {
             try {
                 //Long pooling task;If task is not completed within 100 sec timeout response return for this request
@@ -91,8 +90,7 @@ public class GameController {
         User user = userService.currentUser().get();
         Game game = gameRepository.getTheGame();
         if(user.finishTurn()) {
-            log.info("Next Player");
-            User next = game.nextPlayer();
+            User next = game.nextPlayer(gameRepository);
             next.next();
             userRepository.save(user);
             userRepository.save(next);
@@ -103,7 +101,8 @@ public class GameController {
     }
 
     @PutMapping("/{meepleId}/{x}/{y}")
-    public void move(@PathVariable int meepleId, @PathVariable int x, @PathVariable int y) throws CannotMoveException, HasAlreadyMovedException, SpaceStationCannotMoveException {
+    @SneakyThrows
+    public void move(@PathVariable int meepleId, @PathVariable int x, @PathVariable int y) {
         Optional<AbstractMeeple> meeple = meepleRepository.findById(meepleId);
         System.out.println(meepleId + " sould move frome "+ meeple.get().getField().getCoordinate() +" to: " + x + "/" + y);
         Optional<User> loggedIn = userService.currentUser();

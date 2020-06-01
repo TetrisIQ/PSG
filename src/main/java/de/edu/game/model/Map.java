@@ -9,6 +9,7 @@ import lombok.extern.java.Log;
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 @Entity
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class Map {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Row> rows = new LinkedList<>();
 
     /*@ManyToMany
@@ -33,6 +34,16 @@ public class Map {
             this.rows.add(new Row(y, columns));
         }
     }
+
+    public void spawnAsteroids(int amount) {
+        for (int i = 0; i < amount; i++) {
+            Field f = getRandomEmptyField();
+            f.setMeeple(new Asteroid(f));
+        }
+        log.info("Spawned " + amount + " new Asteroids");
+
+    }
+
 
     public Field findCoordinate(int x, int y) {
         try {
@@ -76,6 +87,17 @@ public class Map {
                 return null;
             }
         }
+    }
+
+    private Field getRandomField() {
+        Random rand = new Random();
+        Row row = this.rows.get(rand.nextInt(rows.size())); // get random row
+        return row.getFields().get(rand.nextInt(row.getFields().size())); // get random field
+    }
+
+    private Field getRandomEmptyField() throws StackOverflowError {
+        Field f = getRandomField();
+        return f.isEmpty() ? f : getRandomEmptyField(); // recursion call, can be a stackoverflow whey all fields in the map are not empty
     }
 
 }

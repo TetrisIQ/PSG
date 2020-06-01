@@ -15,11 +15,11 @@ import java.util.List;
 @Log
 public class SpaceStation extends AbstractMeeple {
 
-    public SpaceStation(Map map, String username, Field field, String name, String color) {
-        super(username, field, name, color);
-        this.setHp(ConfigLoader.shared.getSpaceStationHq());
-        this.setDamage(ConfigLoader.shared.getSpaceStationDamage());
-        this.setAttackRange(ConfigLoader.shared.getSpaceStationAttackRange());
+    public SpaceStation(Map map, String username, Field field, String color) {
+        super(username, field, ConfigLoader.shared.getSpaceStation().getName(), color);
+        this.setHp(ConfigLoader.shared.getSpaceStation().getHp());
+        this.setDamage(ConfigLoader.shared.getSpaceStation().getDamage());
+        this.setAttackRange(ConfigLoader.shared.getSpaceStation().getAttackRange());
     }
 
     public boolean spawnTransporter(Map map, User user) {
@@ -67,11 +67,6 @@ public class SpaceStation extends AbstractMeeple {
     @Override
     public boolean move(Map map, Field newPos) throws SpaceStationCannotMoveException {
         throw new SpaceStationCannotMoveException();
-    }
-
-    @Override
-    public int nextPossibleMoves() {
-        return 0;
     }
 
     @Override
