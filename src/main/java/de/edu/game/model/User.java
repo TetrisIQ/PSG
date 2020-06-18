@@ -30,6 +30,8 @@ public class User {
 
     private String username;
 
+    private int victoryPoints = 0;
+
     @OneToOne(cascade = CascadeType.ALL)
     private SpaceStation spaceStation;
 
@@ -75,5 +77,9 @@ public class User {
 
     public void next() {
         this.state.nextState();
+    }
+
+    public void addPoints(int points) {
+        this.victoryPoints += points;
     }
 }

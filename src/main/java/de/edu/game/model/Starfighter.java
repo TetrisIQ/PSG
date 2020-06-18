@@ -1,10 +1,13 @@
 package de.edu.game.model;
 
+import de.edu.game.config.UserService;
 import de.edu.game.config.loader.ConfigLoader;
 import de.edu.game.exceptions.CannotAttackOwnMeeplesException;
 import de.edu.game.exceptions.CannotMoveButIAttackException;
 import de.edu.game.exceptions.HasAlreadyMovedException;
+import de.edu.game.exceptions.UserNotFoundException;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Entity;
 
@@ -12,11 +15,14 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 public class Starfighter extends AbstractMeeple {
 
+    @Autowired
+    transient UserService userService;
+
     public Starfighter(String username, Field field, String name, String color) {
         super(username, field, name, color);
-        this.setAttackRange(1);
-        this.setDamage("1w20"); //TODO: load via Config
-
+        this.setAttackRange(ConfigLoader.shared.getStarfighter().getAttackRange());
+        this.setDamage(ConfigLoader.shared.getStarfighter().getDamage());
+        this.setDefense(ConfigLoader.shared.getStarfighter().getDefense());
     }
 
 
@@ -61,18 +67,40 @@ public class Starfighter extends AbstractMeeple {
             enemy.makeDamage(attack);
             this.makeDamage(defence);
         } else { // this should be the default case
-            int hpEnemy = enemy.makeDamage(attack - defence);
-            if (hpEnemy <= 0) {
-                // enemy destroyed we can move to the field
-                this.getField().setEmpty();
-                pos.setMeeple(this);
-                this.setField(pos);
+            if (attack < defence) {
+                if (!(enemy.getName().equals(ConfigLoader.shared.getTransporter().getName()))) {
+                    // defence is better so attacker get damage
+                    this.makeDamage(defence - attack);
+                }
             } else {
-                // enemy not destroyed, we must attack again.
-                throw new CannotMoveButIAttackException();
-
+                int hpEnemy = enemy.makeDamage(attack - defence);
+                if (hpEnemy <= 0) {
+                    // enemy destroyed we can move to the field
+                    this.getField().setEmpty();
+                    pos.setMeeple(this);
+                    this.setField(pos);
+                    addPoints(enemy);
+                } else {
+                    // enemy not destroyed, we must attack again.
+                    throw new CannotMoveButIAttackException();
+                }
             }
         }
+    }
 
+    private void addPoints(AbstractMeeple enemy) {
+        // add Points for destroyed Enemy
+        try {
+            int points = 0;
+            if (enemy.getName().equals(ConfigLoader.shared.getStarfighter().getName()))
+                points = ConfigLoader.shared.getPointsConfig().getDestroyStarfighter();
+            if (enemy.getName().equals(ConfigLoader.shared.getSpaceStation().getName()))
+                points = ConfigLoader.shared.getPointsConfig().getDestroySpaceStation();
+            if (enemy.getName().equals(ConfigLoader.shared.getTransporter().getName()))
+                points = ConfigLoader.shared.getPointsConfig().getDestroyTransporter();
+            userService.getUserByUsername(this.getUsername()).addPoints(points);
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
