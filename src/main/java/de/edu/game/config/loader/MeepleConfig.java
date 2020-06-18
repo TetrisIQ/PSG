@@ -2,9 +2,11 @@ package de.edu.game.config.loader;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor // provide a Constructor with all args, witch is required by Gson
+@AllArgsConstructor
 @Getter
+@NoArgsConstructor
 public class MeepleConfig {
 
     private String name;
@@ -16,8 +18,5 @@ public class MeepleConfig {
     private String defense;
 
     private int attackRange;
-
-    private int mineSpeed;
-
 
 }

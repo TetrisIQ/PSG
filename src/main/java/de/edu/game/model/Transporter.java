@@ -1,26 +1,38 @@
 package de.edu.game.model;
 
+import de.edu.game.config.UserService;
 import de.edu.game.config.loader.ConfigLoader;
-import de.edu.game.exceptions.CannotMineException;
-import de.edu.game.exceptions.CannotMoveException;
-import de.edu.game.exceptions.HasAlreadyMovedException;
+import de.edu.game.exceptions.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Entity;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class Transporter extends AbstractMeeple {
 
-    private int storage;
-    private int storageMax;
+    private int storage = ConfigLoader.shared.getAsteroid().getEnergy();
+    private int maxStorage;
+    private int mineSpeed;
+
+    @Autowired
+    transient UserService userService;
 
     public Transporter(String username, Field field, String name, String color) {
         super(username, field, name, color);
+        this.setAttackRange(ConfigLoader.shared.getTransporter().getAttackRange());
+        this.setDamage(ConfigLoader.shared.getTransporter().getDamage());
+        this.setDefense(ConfigLoader.shared.getTransporter().getDefense());
+        this.maxStorage = ConfigLoader.shared.getTransporter().getMaxStorage();
+        this.mineSpeed = ConfigLoader.shared.getTransporter().getMineSpeed();
     }
 
     @Override
-    public boolean move(Map map, Field newPos) throws HasAlreadyMovedException, CannotMineException {
+    public boolean move(Map map, Field newPos) throws HasAlreadyMovedException, CannotMineException, StorageFullException {
         if (isHasMoved()) {
             // can only move on field per Round
             throw new HasAlreadyMovedException();
@@ -33,15 +45,14 @@ public class Transporter extends AbstractMeeple {
                 newPos.setMeeple(this);
                 this.setField(newPos);
             } else {
-                //if Position is not empty, a Transporter will not attack
-                if(newPos.getMeeple().getName().equals(ConfigLoader.shared.getAsteroid().getName())) { // checks if the meeple on the field is an asteroid
-                    Asteroid asteroid = (Asteroid) newPos.getMeeple();
-                    //TODO: improve mining
-                    //Storage implementation in transporter, maxStorage, and slower mining if storage is full
-                    //Update Response Types
-                    int mine = asteroid.mine(ConfigLoader.shared.getTransporter().getMineSpeed());
-                    this.storage = mine;
-                    return true;
+                // if the position is not empty, a Transporter will not attack
+                // if the position is not empty and the other meeple is an Asteroid the Transporter will start mining if possible
+                if(newPos.getMeeple().getName().equals(ConfigLoader.shared.getAsteroid().getName())) {
+                    return checkandMine(newPos);
+                }
+                // if the position is not empty and the other meeple is a SpaceStation the Transporter will start deploying the energy to the SpaceStation
+                if(newPos.getMeeple().getName().equals(ConfigLoader.shared.getSpaceStation().getName())) {
+                    return deployToSpaceStation(newPos);
                 }
                 else {
                     this.setHasMoved(false); // The transporter can move to an other field
@@ -53,6 +64,35 @@ public class Transporter extends AbstractMeeple {
         }
         this.setHasMoved(false);
         return false;
+    }
+
+    private boolean deployToSpaceStation(Field newPos) {
+        SpaceStation spaceStation = (SpaceStation) newPos.getMeeple();
+        spaceStation.addEnergy(this.storage);
+        this.storage = 0;
+        this.setHasMoved(true);
+        return true;
+    }
+
+    private boolean checkandMine(Field newPos) throws CannotMineException, StorageFullException {
+        Asteroid asteroid = (Asteroid) newPos.getMeeple();
+        if(this.storage < this.maxStorage) { // check if there is capacity
+            int mine = asteroid.mine(this.mineSpeed);
+            this.storage = mine;
+            this.setHasMoved(true);
+            addMiningPoints();
+            return true;
+        } else {
+            throw new StorageFullException();
+        }
+    }
+
+    private void addMiningPoints() {
+        try {
+            userService.getUserByUsername(this.getUsername()).addPoints(5);
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

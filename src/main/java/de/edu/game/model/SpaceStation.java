@@ -2,6 +2,7 @@ package de.edu.game.model;
 
 import de.edu.game.config.loader.ConfigLoader;
 import de.edu.game.exceptions.SpaceStationCannotMoveException;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -13,7 +14,11 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Log
+@Getter
 public class SpaceStation extends AbstractMeeple {
+
+    private int storage = 0;
+
 
     public SpaceStation(Map map, String username, Field field, String color) {
         super(username, field, ConfigLoader.shared.getSpaceStation().getName(), color);
@@ -29,6 +34,7 @@ public class SpaceStation extends AbstractMeeple {
             AbstractMeeple starfighter = new Transporter(this.getUsername(), freeFields.get(0), "Transporter", this.getColor());
             freeFields.get(0).setMeeple(starfighter);
             user.addMeeple(starfighter);
+            user.addPoints(ConfigLoader.shared.getPointsConfig().getCreateTransporter());
             return true;
 
         } catch (IndexOutOfBoundsException ex) {
@@ -45,6 +51,7 @@ public class SpaceStation extends AbstractMeeple {
             AbstractMeeple starfighter = new Starfighter(this.getUsername(), freeFields.get(0), "Starfighter", this.getColor());
             freeFields.get(0).setMeeple(starfighter);
             user.addMeeple(starfighter);
+            user.addPoints(ConfigLoader.shared.getPointsConfig().getCreateStarfighter());
             return true;
         } catch (IndexOutOfBoundsException ex) {
             // No empty fields to spawn Meeples
@@ -62,6 +69,10 @@ public class SpaceStation extends AbstractMeeple {
             }
         }
         return returnList;
+    }
+
+    public void addEnergy(int energie) {
+        this.storage += energie;
     }
 
     @Override
