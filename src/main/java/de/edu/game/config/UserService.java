@@ -1,5 +1,6 @@
 package de.edu.game.config;
 
+import de.edu.game.exceptions.UserNotFoundException;
 import de.edu.game.model.User;
 import de.edu.game.repositorys.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,15 @@ public class UserService implements UserDetailsService {
             return userDetails(user.get());
         }
         return null;
+    }
+
+    public User getUserByUsername(String username) throws UserNotFoundException {
+        Optional<User> oUser = userRepository.findByUsername(username);
+        if(oUser.isPresent()) {
+            return oUser.get();
+        } else {
+            throw new UserNotFoundException("");
+        }
     }
 
     private org.springframework.security.core.userdetails.User userDetails(User user) {

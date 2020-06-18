@@ -89,6 +89,18 @@ public class Map {
         }
     }
 
+    public int findAllAsteroids() {
+        int ret = 0;
+        for(Row r : rows) {
+            for (Field f : r.getFields()) {
+                if(f.getMeeple().getName().equals(ConfigLoader.shared.getAsteroid().getName())) {
+                    ret++;
+                }
+            }
+        }
+        return ret;
+    }
+
     private Field getRandomField() {
         Random rand = new Random();
         Row row = this.rows.get(rand.nextInt(rows.size())); // get random row

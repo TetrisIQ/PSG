@@ -1,10 +1,9 @@
 package de.edu.game.controller;
 
+import de.edu.game.config.loader.ConfigLoader;
 import de.edu.game.controller.responses.MapResponse;
 import de.edu.game.exceptions.GameAlreadyStartedException;
-import de.edu.game.model.Dice;
-import de.edu.game.model.Game;
-import de.edu.game.model.Map;
+import de.edu.game.model.*;
 import de.edu.game.repositorys.GameRepository;
 import de.edu.game.repositorys.MapRepository;
 import de.edu.game.repositorys.MeepleRepository;
@@ -12,11 +11,16 @@ import de.edu.game.repositorys.UserRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequestMapping("/admin")
@@ -79,6 +83,25 @@ public class AdminController {
         } catch (IndexOutOfBoundsException e) {
             // pass, because the map is not present aka. the game is not started
         }
+    }
+
+
+    @GetMapping("/update")
+    public DeferredResult<String> isMyTurn() throws TimeoutException {
+        Long timeOutInMilliSec = 100000L;
+        DeferredResult<String> deferredResult = new DeferredResult<>(timeOutInMilliSec, "Update");
+        CompletableFuture.runAsync(() -> {
+            try {
+                //Long pooling task;If task is not completed within 100 sec timeout response return for this request
+                if(new MapViewerMessageUpdate().hasUpdates()) {
+                    deferredResult.setResult(MapViewerMessageUpdate.message);
+                    MapViewerMessageUpdate.clear();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        return deferredResult;
     }
 
 }

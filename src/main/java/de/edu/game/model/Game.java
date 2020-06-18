@@ -38,6 +38,10 @@ public class Game {
 
     private long threadId = -1;
 
+    private int roundCounter = 1;
+
+    private int maxRounds = ConfigLoader.shared.getMaxRounds();
+
     // ############### Constructor ###############
     public Game() {
         this.state = new GameState();
@@ -116,6 +120,10 @@ public class Game {
         } catch (Exception ex) {
             //last player in list
             //Round finished
+            this.roundCounter++;
+            if(this.maxRounds - this.roundCounter < 10 ) {
+                MapViewerMessageUpdate.send("Only " + (this.maxRounds - this.roundCounter) + " rounds Left!");
+            }
             this.userTurnIndex = 0;
             return currentPlayer();
         }
