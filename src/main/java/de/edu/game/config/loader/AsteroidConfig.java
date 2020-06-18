@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AsteroidConfig {
 
-
     private String name = "Asteroid";
 
     private int hp = 30;
@@ -19,5 +18,7 @@ public class AsteroidConfig {
     private int energy = 100;
 
     private String color = "#DCDF62";
+
+    private int maxAsteroids = 20;
 
 }

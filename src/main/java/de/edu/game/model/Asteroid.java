@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 public class Asteroid extends AbstractMeeple {
 
-    private int energy;
+    private int energy; // this means "storage"
 
     public Asteroid(Field field) {
         super("admin", field, ConfigLoader.shared.getAsteroid().getName(), ConfigLoader.shared.getAsteroid().getColor());
@@ -33,7 +33,7 @@ public class Asteroid extends AbstractMeeple {
                 return delta;
             }
         } else {
-            // the Asteroid shoulder be there if he has no more energy
+            // the Asteroid should not be there if he has no more energy
             this.getField().setEmpty(); // Make sure if the Asteroid will disappear on the Map
             throw new CannotMineException();
         }

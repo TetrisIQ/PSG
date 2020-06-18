@@ -70,6 +70,10 @@ public class AdminController {
     public void spawnAsteroids() {
         try {
             Map map = mapRepository.getTheMap();
+            // check if the maximum amount of Asteroids are on the Map
+            if (map.findAllAsteroids() >= ConfigLoader.shared.getAsteroid().getMaxAsteroids()) {
+                return;
+            }
             map.spawnAsteroids(new Dice("1w3").throwDice());
             mapRepository.save(map);
         } catch (IndexOutOfBoundsException e) {
