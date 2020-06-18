@@ -58,10 +58,10 @@ public class Swagger2Config {
 
 
     private ApiInfo apiEndPointsInfo() {
-        return new ApiInfoBuilder().title("Entwicklung eines Lernspiels")
+        return new ApiInfoBuilder().title("A programmable space game (PSG)")
                 .description("Entwicklung eines Lernspiels für die Programmierausbildung")
-                .contact(new Contact("Alexander Werner", "https://github.com/TetrisIQ/educational-game", "tetrisiq@tuta.io"))
-                .license("noch unklar")
+                .contact(new Contact("Alexander Werner", "https://github.com/TetrisIQ/psg", "psg@tetrisiq.de"))
+                .license("")
                 .licenseUrl("")
                 .version("0.1.0")
                 .build();
