@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-@RequiredArgsConstructor // provide a Constructor with all args, witch is required by Gson
+@RequiredArgsConstructor
 @Getter
 public class ConfigLoader {
     static {
@@ -38,16 +38,20 @@ public class ConfigLoader {
     // Parameters witch should be in the config files
     // Here are the default values, if they are not configured in other ways
     // The default values will be override by the Config file
-    private long timeoutInRounds = 0; //  TODO: maybe I will remove this
+    private long timeoutInRounds = 0;
     private int maxPlayer = 4;
     private long timeAfterRound = 0;
     private int rows = 40;
     private int columns = 20;
-    private MeepleConfig spaceStation = new MeepleConfig("SpaceStation", 400, "2w20+30", "2w20+30", 2,10);
-    private MeepleConfig transporter = new MeepleConfig("Transporter", 100, "0d0","1d20+5",1,20);
+    private int SpaceStationMineSpeed = 10;
+    private int maxRounds = 500;
+    private MeepleConfig spaceStation = new MeepleConfig("SpaceStation", 400, "2w20+30", "2w20+30", 1);
+    private TransporterConfig transporter = new TransporterConfig(100, "0d0","1d20+5",1,50,50);
+    private MeepleConfig starfighter = new MeepleConfig("Starfighter", 100, "2d20+24", "3d20+1",1);
     private AsteroidConfig asteroid = new AsteroidConfig();
     private List<Coordinate> spaceStations = new LinkedList<>(Arrays.asList(new Coordinate(0, 1, 1), new Coordinate(0, 28, 1), new Coordinate(0, 1, 18), new Coordinate(0, 38, 18)));
     private List<String> colors = new LinkedList<>(Arrays.asList("#ff0000", "#0033ff", "#06b500", "#aa00ff", "#f5930a"));
+    private VictoryPointsConfig pointsConfig = new VictoryPointsConfig();
 
 
     public String getRandomColor() {
