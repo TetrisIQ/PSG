@@ -44,12 +44,11 @@ public class GameController {
 
     @GetMapping
     private Set<FieldResponse> getMapInformation() throws InterruptedException {
-        //TODO: Sometimes the meeples are missing
         Game game = gameRepository.getTheGame();
         User user = userService.currentUser().get();
         Set<FieldResponse> ret = new HashSet<>();
         if (user.myTurn()) {
-            game.getFildInfo(user).forEach(f -> ret.add(new FieldResponse(f)));
+            game.getFildInfo(user).forEach(f -> ret.add(new FieldResponse(user.getUsername(), f)));
         }
         return ret;
     }
@@ -91,10 +90,10 @@ public class GameController {
         Game game = gameRepository.getTheGame();
         if(user.finishTurn()) {
             User next = game.nextPlayer(gameRepository);
+            MapViewerMessageUpdate.send(next.getUsername() + "'s turn");
             next.next();
             userRepository.save(user);
             userRepository.save(next);
-           // meepleRepository.saveAll(test.getMeepleList());
         } else {
             throw new NotYourTurnException();
         }
@@ -107,15 +106,25 @@ public class GameController {
         System.out.println(meepleId + " sould move frome "+ meeple.get().getField().getCoordinate() +" to: " + x + "/" + y);
         Optional<User> loggedIn = userService.currentUser();
         Map map = mapRepository.getTheMap();
-        if (loggedIn.isPresent() && meeple.isPresent()) {
+        if (loggedIn.isPresent() && meeple.isPresent() && loggedIn.get().myTurn()) {
             if (meeple.get().move(map, map.findCoordinate(x, y))) {
             } else {
                 throw new CannotMoveException();
             }
             meepleRepository.save(meeple.get());
             mapRepository.save(map);
-
+            userRepository.save(loggedIn.get()); // save if points were added
         }
-
     }
+
+    @PostMapping("/build/starfighter")
+    public void buildStarfighter() {
+        userService.currentUser().get().getSpaceStation().spawnStarfighter(mapRepository.getTheMap(), userService.currentUser().get());
+    }
+
+    @PostMapping("/build/transporter")
+    public void buildSTransporter() {
+        userService.currentUser().get().getSpaceStation().spawnTransporter(mapRepository.getTheMap(), userService.currentUser().get());
+    }
+
 }
