@@ -14,12 +14,12 @@ public class FieldResponse {
 
     public boolean empty;
 
-    public FieldResponse(Field field) {
+    public FieldResponse(String username, Field field) {
         this.id = field.getId();
         this.coordinate = field.getCoordinate();
         this.empty = field.isEmpty();
         if(!empty) {
-            this.meeple = new MeepleResponse(field.getMeeple());
+            this.meeple = new MeepleResponse(username, field.getMeeple());
         }
     }
 

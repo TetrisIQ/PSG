@@ -9,7 +9,7 @@ public class RowResponse {
 
     public List<FieldResponse> fields = new LinkedList<>();
 
-    public RowResponse(Row row) {
-        row.getFields().forEach(f -> this.fields.add(new FieldResponse(f)));
+    public RowResponse(String username, Row row) {
+        row.getFields().forEach(f -> this.fields.add(new FieldResponse(username, f)));
     }
 }

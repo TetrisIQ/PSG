@@ -10,7 +10,7 @@ public class MapResponse {
     public List<RowResponse> rows = new LinkedList<>();
 
     public MapResponse(Map map) {
-        map.getRows().forEach(r -> this.rows.add(new RowResponse(r)));
+        map.getRows().forEach(r -> this.rows.add(new RowResponse("admin", r)));
     }
 
 
