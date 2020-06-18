@@ -88,7 +88,7 @@ public abstract class AbstractMeeple {
         return returnList;
     }
 
-    abstract public boolean move(Map map, Field newPos) throws HasAlreadyMovedException, SpaceStationCannotMoveException, CannotMoveException, CannotMoveButIAttackException, CannotMineException, CannotAttackOwnMeeplesException;
+    abstract public boolean move(Map map, Field newPos) throws HasAlreadyMovedException, SpaceStationCannotMoveException, CannotMoveException, CannotMoveButIAttackException, CannotMineException, CannotAttackOwnMeeplesException, StorageFullException;
 
     abstract public void attack(Field pos) throws CannotMoveException, CannotMoveButIAttackException, CannotAttackOwnMeeplesException;
 
