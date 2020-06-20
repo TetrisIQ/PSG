@@ -16,7 +16,7 @@ import javax.persistence.Entity;
 public class Starfighter extends AbstractMeeple {
 
     @Autowired
-    transient UserService userService;
+    private transient UserService userService;
 
     public Starfighter(String username, Field field, String name, String color) {
         super(username, field, name, color);

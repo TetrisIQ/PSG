@@ -40,7 +40,7 @@ public class UserState {
         }
     }
 
-    boolean isMyturn() {
+    public boolean isMyturn() {
         return this.state.equals(UserStates.MYTURN);
     }
 

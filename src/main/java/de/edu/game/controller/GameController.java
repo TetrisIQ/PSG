@@ -34,16 +34,13 @@ public class GameController {
     private MapRepository mapRepository;
 
     @Autowired
-    private FieldRepository fieldRepository;
-
-    @Autowired
     private MeepleRepository meepleRepository;
 
     @Autowired
     private UserService userService;
 
     @GetMapping
-    private Set<FieldResponse> getMapInformation() throws InterruptedException {
+    public Set<FieldResponse> getMapInformation() throws InterruptedException {
         Game game = gameRepository.getTheGame();
         User user = userService.currentUser().get();
         Set<FieldResponse> ret = new HashSet<>();
@@ -103,7 +100,6 @@ public class GameController {
     @SneakyThrows
     public void move(@PathVariable int meepleId, @PathVariable int x, @PathVariable int y) {
         Optional<AbstractMeeple> meeple = meepleRepository.findById(meepleId);
-        System.out.println(meepleId + " sould move frome "+ meeple.get().getField().getCoordinate() +" to: " + x + "/" + y);
         Optional<User> loggedIn = userService.currentUser();
         Map map = mapRepository.getTheMap();
         if (loggedIn.isPresent() && meeple.isPresent() && loggedIn.get().myTurn()) {

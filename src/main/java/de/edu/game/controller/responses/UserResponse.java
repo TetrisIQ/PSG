@@ -1,7 +1,6 @@
 package de.edu.game.controller.responses;
 
 import de.edu.game.model.User;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

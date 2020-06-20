@@ -1,7 +1,5 @@
 package de.edu.game.model;
 
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity

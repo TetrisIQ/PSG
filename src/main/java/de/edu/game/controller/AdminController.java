@@ -6,14 +6,10 @@ import de.edu.game.exceptions.GameAlreadyStartedException;
 import de.edu.game.model.*;
 import de.edu.game.repositorys.GameRepository;
 import de.edu.game.repositorys.MapRepository;
-import de.edu.game.repositorys.MeepleRepository;
 import de.edu.game.repositorys.UserRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
@@ -34,12 +30,6 @@ public class AdminController {
 
     @Autowired
     private MapRepository mapRepository;
-
-    @Autowired
-    private MeepleRepository meepleRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @PutMapping("/start")
     @ResponseStatus(code = HttpStatus.OK)
