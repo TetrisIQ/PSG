@@ -16,6 +16,8 @@ public class Asteroid extends AbstractMeeple {
     public Asteroid(Field field) {
         super("admin", field, ConfigLoader.shared.getAsteroid().getName(), ConfigLoader.shared.getAsteroid().getColor());
         this.energy = ConfigLoader.shared.getAsteroid().getEnergy();
+        this.setDefense("0d0");
+        this.setHp(100);
 
     }
 
