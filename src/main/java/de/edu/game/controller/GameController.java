@@ -76,7 +76,7 @@ public class GameController {
         CompletableFuture.runAsync(() -> {
             try {
                 //Long pooling task;If task is not completed within 100 sec timeout response return for this request
-                if(this.isMyTurn(userRepository, user.getId())) {
+                if (this.isMyTurn(userRepository, user.getId())) {
                     deferredResult.setResult(HttpStatus.OK);
                 }
             } catch (Exception ex) {
@@ -91,11 +91,16 @@ public class GameController {
     public void finishTurn() throws NotYourTurnException {
         User user = userService.currentUser().get();
         Game game = gameRepository.getTheGame();
-        if(user.finishTurn()) {
+        if (user.finishTurn()) {
             User next = game.nextPlayer(gameRepository);
             MapViewerMessageUpdate.send(next.getUsername() + "'s turn");
             next.next();
             userRepository.save(user);
+            try {
+                Thread.currentThread().sleep(ConfigLoader.shared.getTimeAfterRound());
+            } catch (InterruptedException e) {
+                log.warning("Thread where interrupted, Not time to wait");
+            }
             userRepository.save(next);
         } else {
             throw new NotYourTurnException();
