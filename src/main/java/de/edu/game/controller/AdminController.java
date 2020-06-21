@@ -94,6 +94,21 @@ public class AdminController {
         return deferredResult;
     }
 
+    /**
+     * This is a temporary workaround, until I get the Spring security annotations working <br>
+     * This Throws en exception if the user has not the admin or root role
+     *
+     * @throws NotAuthorizedException
+     */
+    private void hasAuthority() throws NotAuthorizedException {
+        Optional<User> user = userService.currentUser();
+        if (user.isPresent()) {
+            if (!(user.get().getRole().equals("admin") || user.get().getRole().equals("root"))) {
+                throw new NotAuthorizedException();
+            }
+        }
+    }
+
 }
 
 
