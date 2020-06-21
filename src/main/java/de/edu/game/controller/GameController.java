@@ -1,10 +1,16 @@
 package de.edu.game.controller;
 
 import de.edu.game.config.UserService;
+import de.edu.game.config.loader.ConfigLoader;
 import de.edu.game.controller.responses.FieldResponse;
-import de.edu.game.exceptions.*;
+import de.edu.game.exceptions.CannotMoveException;
+import de.edu.game.exceptions.NotEnoughEnergyException;
+import de.edu.game.exceptions.NotYourTurnException;
 import de.edu.game.model.*;
-import de.edu.game.repositorys.*;
+import de.edu.game.repositorys.GameRepository;
+import de.edu.game.repositorys.MapRepository;
+import de.edu.game.repositorys.MeepleRepository;
+import de.edu.game.repositorys.UserRepository;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,13 +120,26 @@ public class GameController {
     }
 
     @PostMapping("/build/starfighter")
-    public void buildStarfighter() {
-        userService.currentUser().get().getSpaceStation().spawnStarfighter(mapRepository.getTheMap(), userService.currentUser().get());
+    public void buildStarfighter() throws NotEnoughEnergyException {
+        Map map = mapRepository.getTheMap();
+        User user = userService.currentUser().get();
+        if (user.getSpaceStation().spawnStarfighter(map, user)) {
+            mapRepository.save(map);
+            userRepository.save(user);
+        } else {
+            throw new NotEnoughEnergyException();
+        }
     }
 
     @PostMapping("/build/transporter")
-    public void buildSTransporter() {
-        userService.currentUser().get().getSpaceStation().spawnTransporter(mapRepository.getTheMap(), userService.currentUser().get());
+    public void buildSTransporter() throws NotEnoughEnergyException {
+        Map map = mapRepository.getTheMap();
+        User user = userService.currentUser().get();
+        if (user.getSpaceStation().spawnTransporter(map, user)) {
+            mapRepository.save(map);
+            userRepository.save(user);
+        } else {
+            throw new NotEnoughEnergyException();
+        }
     }
-
 }

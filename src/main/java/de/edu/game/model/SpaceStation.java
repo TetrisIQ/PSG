@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 public class SpaceStation extends AbstractMeeple {
 
-    private int storage = 0;
+    private int storage = 520; // when starting the game
 
 
     public SpaceStation(Map map, String username, Field field, String color) {
@@ -28,36 +28,44 @@ public class SpaceStation extends AbstractMeeple {
     }
 
     public boolean spawnTransporter(Map map, User user) {
-        try {
-            List<Field> freeFields = findFreeFields(map);
-            Collections.shuffle(freeFields);
-            AbstractMeeple starfighter = new Transporter(this.getUsername(), freeFields.get(0), "Transporter", this.getColor());
-            freeFields.get(0).setMeeple(starfighter);
-            user.addMeeple(starfighter);
-            user.addPoints(ConfigLoader.shared.getPointsConfig().getCreateTransporter());
-            return true;
-
-        } catch (IndexOutOfBoundsException ex) {
-            // No empty fields to spawn Meeples
-            log.warning("Cannot Spawn meeple, no space!");
+        if (this.storage >= ConfigLoader.shared.getTransporter().getCoasts()) {
+            try {
+                List<Field> freeFields = findFreeFields(map);
+                Collections.shuffle(freeFields);
+                AbstractMeeple starfighter = new Transporter(this.getUsername(), freeFields.get(0), "Transporter", this.getColor());
+                freeFields.get(0).setMeeple(starfighter);
+                user.addMeeple(starfighter);
+                user.addPoints(ConfigLoader.shared.getPointsConfig().getCreateTransporter());
+                return true;
+            } catch (IndexOutOfBoundsException ex) {
+                // No empty fields to spawn Meeples
+                log.warning("Cannot Spawn meeple, no space!");
+                return false;
+            }
+        } else {
             return false;
         }
     }
 
     public boolean spawnStarfighter(Map map, User user) {
-        try {
-            List<Field> freeFields = findFreeFields(map);
-            Collections.shuffle(freeFields);
-            AbstractMeeple starfighter = new Starfighter(this.getUsername(), freeFields.get(0), "Starfighter", this.getColor());
-            freeFields.get(0).setMeeple(starfighter);
-            user.addMeeple(starfighter);
-            user.addPoints(ConfigLoader.shared.getPointsConfig().getCreateStarfighter());
-            return true;
-        } catch (IndexOutOfBoundsException ex) {
-            // No empty fields to spawn Meeples
+        if (this.storage >= ConfigLoader.shared.getStarfighter().getCoasts()) {
+            try {
+                List<Field> freeFields = findFreeFields(map);
+                Collections.shuffle(freeFields);
+                AbstractMeeple starfighter = new Starfighter(this.getUsername(), freeFields.get(0), "Starfighter", this.getColor());
+                freeFields.get(0).setMeeple(starfighter);
+                user.addMeeple(starfighter);
+                user.addPoints(ConfigLoader.shared.getPointsConfig().getCreateStarfighter());
+                return true;
+            } catch (IndexOutOfBoundsException ex) {
+                // No empty fields to spawn Meeples
+                return false;
+            }
+        } else {
             return false;
         }
     }
+
 
     private List<Field> findFreeFields(Map map) {
         List<Field> returnList = new LinkedList<>();
