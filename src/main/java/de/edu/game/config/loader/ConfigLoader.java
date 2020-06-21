@@ -40,14 +40,14 @@ public class ConfigLoader {
     // The default values will be override by the Config file
     private long timeoutInRounds = 0;
     private int maxPlayer = 4;
-    private long timeAfterRound = 0;
+    private long timeAfterRound = 5000; //in milliseconds
     private int rows = 40;
     private int columns = 20;
     private int SpaceStationMineSpeed = 10;
     private int maxRounds = 500;
-    private MeepleConfig spaceStation = new MeepleConfig("SpaceStation", 400, "2w20+30", "2w20+30", 1);
-    private TransporterConfig transporter = new TransporterConfig(100, "0d0","1d20+5",1,50,50);
-    private MeepleConfig starfighter = new MeepleConfig("Starfighter", 100, "2d20+24", "3d20+1",1);
+    private MeepleConfig spaceStation = new MeepleConfig("SpaceStation", 400, "2w20+30", "2w20+30", 1, -1);
+    private TransporterConfig transporter = new TransporterConfig(100, "0d0","1d20+5",1,50,50,120);
+    private MeepleConfig starfighter = new MeepleConfig("Starfighter", 100, "2d20+24", "3d20+1",1, 120);
     private AsteroidConfig asteroid = new AsteroidConfig();
     private List<Coordinate> spaceStations = new LinkedList<>(Arrays.asList(new Coordinate(0, 1, 1), new Coordinate(0, 28, 1), new Coordinate(0, 1, 18), new Coordinate(0, 38, 18)));
     private List<String> colors = new LinkedList<>(Arrays.asList("#ff0000", "#0033ff", "#06b500", "#aa00ff", "#f5930a"));

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MeepleConfig {
 
+
     private String name;
 
     private int hp;
@@ -19,4 +20,5 @@ public class MeepleConfig {
 
     private int attackRange;
 
+    private int coasts;
 }
