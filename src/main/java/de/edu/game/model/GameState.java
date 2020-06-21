@@ -11,7 +11,7 @@ public class GameState {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id = 0;
+    private int id;
 
     private GameStates state;
 

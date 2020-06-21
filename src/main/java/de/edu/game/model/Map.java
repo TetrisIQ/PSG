@@ -89,16 +89,16 @@ public class Map {
         }
     }
 
-    public int findAllAsteroids() {
-        int ret = 0;
+    public int countAllAsteroids() {
+        int counter = 0;
         for(Row r : rows) {
             for (Field f : r.getFields()) {
-                if(f.getMeeple().getName().equals(ConfigLoader.shared.getAsteroid().getName())) {
-                    ret++;
+                if(f.getMeeple() != null && f.getMeeple().getName().equals(ConfigLoader.shared.getAsteroid().getName())) {
+                    counter++;
                 }
             }
         }
-        return ret;
+        return counter;
     }
 
     private Field getRandomField() {

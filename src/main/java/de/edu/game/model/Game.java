@@ -125,6 +125,7 @@ public class Game {
                 MapViewerMessageUpdate.send("Only " + (this.maxRounds - this.roundCounter) + " rounds Left!");
             }
             this.userTurnIndex = 0;
+
             return currentPlayer();
         }
     }
