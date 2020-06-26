@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @ToString
 @NoArgsConstructor
-@Log
+@Log4j2
 public class User {
 
     @Id
@@ -69,7 +69,7 @@ public class User {
 
     public boolean addMeeple(AbstractMeeple meeple) {
         if (meeple.getName().equals("SpaceStation")) {
-            log.info("SpaceStations should not be in the meeple list. Use the property spaceStation instead!");
+            log.warn("SpaceStations should not be in the meeple list. Use the property spaceStation instead!");
             return false;
         }
         return this.meepleList.add(meeple);

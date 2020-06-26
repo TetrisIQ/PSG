@@ -4,7 +4,7 @@ import de.edu.game.config.loader.ConfigLoader;
 import de.edu.game.exceptions.SpaceStationCannotMoveException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.Entity;
 import java.util.Collections;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@Log
+@Log4j2
 @Getter
 public class SpaceStation extends AbstractMeeple {
 
@@ -39,7 +39,7 @@ public class SpaceStation extends AbstractMeeple {
                 return true;
             } catch (IndexOutOfBoundsException ex) {
                 // No empty fields to spawn Meeples
-                log.warning("Cannot Spawn meeple, no space!");
+                log.warn("Cannot Spawn meeple, no space!");
                 return false;
             }
         } else {

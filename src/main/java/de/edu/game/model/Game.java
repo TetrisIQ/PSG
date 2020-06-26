@@ -5,7 +5,7 @@ import de.edu.game.repositorys.GameRepository;
 import de.edu.game.repositorys.UserRepository;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.*;
 import java.util.*;
@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 @Entity
 @Getter
-@Log
+@Log4j2
 public class Game {
 
     // ############### Parameter ###############
@@ -78,7 +78,7 @@ public class Game {
         User user = this.nextPlayer(gameRepository);
         user.next();
         this.map.spawnAsteroids(1);
-        log.info(this.currentPlayer().getUsername() + " starts the Game");
+        log.info("{} starts the Game",this.currentPlayer().getUsername());
         return true;
     }
 

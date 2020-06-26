@@ -4,7 +4,7 @@ import de.edu.game.config.loader.ConfigLoader;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -15,14 +15,14 @@ import java.util.Random;
 @NoArgsConstructor
 @ToString
 @Getter
-@Log
+@Log4j2
 public class Map {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Row> rows = new LinkedList<>();
 
     /*@ManyToMany
@@ -40,7 +40,7 @@ public class Map {
             Field f = getRandomEmptyField();
             f.setMeeple(new Asteroid(f));
         }
-        log.info("Spawned " + amount + " new Asteroids");
+        log.info("Spawned {} new Asteroids", amount);
 
     }
 
@@ -75,13 +75,13 @@ public class Map {
                 sb.append(y).append(" ");
             }
             sb.append("]");
-            log.config(sb.toString());
+            log.debug(sb.toString());
             //recursive call with fixed parameters
             if (xOld != x || yOld != y) {
                 return findCoordinate(x, y);
             } else {
                 // this could not be possible!
-                log.warning("Fatal Error in Map.findCoordinate()! " + x + "/" + y);
+                log.warn("Fatal Error in Map.findCoordinate()! {}/{}", x, y);
                 ex.printStackTrace();
                 System.exit(-1);
                 return null;
@@ -91,9 +91,9 @@ public class Map {
 
     public int countAllAsteroids() {
         int counter = 0;
-        for(Row r : rows) {
+        for (Row r : rows) {
             for (Field f : r.getFields()) {
-                if(f.getMeeple() != null && f.getMeeple().getName().equals(ConfigLoader.shared.getAsteroid().getName())) {
+                if (f.getMeeple() != null && f.getMeeple().getName().equals(ConfigLoader.shared.getAsteroid().getName())) {
                     counter++;
                 }
             }

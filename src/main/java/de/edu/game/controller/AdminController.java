@@ -8,7 +8,7 @@ import de.edu.game.exceptions.NotAuthorizedException;
 import de.edu.game.model.*;
 import de.edu.game.repositorys.GameRepository;
 import de.edu.game.repositorys.MapRepository;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @RequestMapping("/admin")
 @CrossOrigin(origins = "http://localhost:8080")
-@Log
+@Log4j2
 @EnableScheduling
 public class AdminController {
 
@@ -41,13 +41,13 @@ public class AdminController {
         hasAuthority();
         Game game = gameRepository.getTheGame();
         if (game.startGame(gameRepository)) {
-            log.info("Game Started with " + game.getUsers().size() + " player");
+            log.info("Game Started with {} player", game.getUsers().size());
             mapRepository.save(game.getMap());
             gameRepository.save(game);
             log.info(game.getMap().toString());
         } else {
             //game is already started
-            log.warning("Game is already started. Cannot start the Game");
+            log.warn("Game is already started. Cannot start the Game");
             throw new GameAlreadyStartedException();
         }
     }

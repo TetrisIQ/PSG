@@ -13,7 +13,7 @@ import de.edu.game.repositorys.GameRepository;
 import de.edu.game.repositorys.UserRepository;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
-@Log
+@Log4j2
 public class UserController {
 
     @Autowired
@@ -74,7 +74,7 @@ public class UserController {
         Game game = gameRepository.getTheGame();
         if (game.registerUser(user)) {
             gameRepository.save(game);
-            log.info(user.getUsername() + " (" + user.getId() + ") joined the Game");
+            log.info("{} ({}) joined the Game", user.getUsername(), user.getId());
         } else  {
             // game is started, cannot Join a running Game
             throw new GameAlreadyStartedException();

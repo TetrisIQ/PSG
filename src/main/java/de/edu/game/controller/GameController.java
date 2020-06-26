@@ -12,7 +12,7 @@ import de.edu.game.repositorys.MapRepository;
 import de.edu.game.repositorys.MeepleRepository;
 import de.edu.game.repositorys.UserRepository;
 import lombok.SneakyThrows;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequestMapping("/game")
-@Log
+@Log4j2
 public class GameController {
 
     @Autowired
@@ -99,7 +99,7 @@ public class GameController {
             try {
                 Thread.currentThread().sleep(ConfigLoader.shared.getTimeAfterRound());
             } catch (InterruptedException e) {
-                log.warning("Thread where interrupted, Not time to wait");
+                log.warn("Thread where interrupted, Not time to wait");
             }
             userRepository.save(next);
         } else {
