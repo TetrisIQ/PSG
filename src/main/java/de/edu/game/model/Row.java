@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "rows") //row is an SQL key words
@@ -19,7 +19,7 @@ public class Row {
     private int id;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Field> fields = new LinkedList<>();
+    private List<Field> fields = new ArrayList<>();
 
     public Row(int y, int length) {
         for (int x = 0; x < length; x++) {

@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Getter
@@ -49,8 +46,8 @@ public class ConfigLoader {
     private TransporterConfig transporter = new TransporterConfig(100, "0d0","1d20+5",1,50,50,120);
     private MeepleConfig starfighter = new MeepleConfig("Starfighter", 100, "2d20+24", "3d20+1",1, 120);
     private AsteroidConfig asteroid = new AsteroidConfig();
-    private List<Coordinate> spaceStations = new LinkedList<>(Arrays.asList(new Coordinate(0, 1, 1), new Coordinate(0, 28, 1), new Coordinate(0, 1, 18), new Coordinate(0, 38, 18)));
-    private List<String> colors = new LinkedList<>(Arrays.asList("#ff0000", "#0033ff", "#06b500", "#aa00ff", "#f5930a"));
+    private List<Coordinate> spaceStations = new ArrayList<>(Arrays.asList(new Coordinate(0, 1, 1), new Coordinate(0, 28, 1), new Coordinate(0, 1, 18), new Coordinate(0, 38, 18)));
+    private List<String> colors = new ArrayList<>(Arrays.asList("#ff0000", "#0033ff", "#06b500", "#aa00ff", "#f5930a"));
     private VictoryPointsConfig pointsConfig = new VictoryPointsConfig();
 
 

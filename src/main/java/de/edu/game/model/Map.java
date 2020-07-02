@@ -7,6 +7,7 @@ import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -23,7 +24,7 @@ public class Map {
     private int id;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Row> rows = new LinkedList<>();
+    private List<Row> rows = new ArrayList<>();
 
     /*@ManyToMany
    Benötigt private List<AbstractMeeple> meeples = new LinkedList<>();
