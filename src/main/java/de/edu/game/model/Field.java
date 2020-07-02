@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
@@ -42,4 +43,10 @@ public class Field {
     public String toString() {
         return "[" + coordinate.getXCoordinate() + "/" + coordinate.getYCoordinate() + "-" + meeple + "]";
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(coordinate.getXCoordinate(), coordinate.getYCoordinate());
+    }
+
 }

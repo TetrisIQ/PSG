@@ -1,16 +1,14 @@
 package de.edu.game.model;
 
 import de.edu.game.config.loader.ConfigLoader;
+import de.edu.game.exceptions.NoEmptyFieldsException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor
@@ -38,7 +36,13 @@ public class Map {
 
     public void spawnAsteroids(int amount) {
         for (int i = 0; i < amount; i++) {
-            Field f = getRandomEmptyField();
+            Field f = null;
+            try {
+                f = getRandomEmptyField();
+            } catch (NoEmptyFieldsException e) {
+                log.warn("No Empty Fields");
+                return;
+            }
             f.setMeeple(new Asteroid(f));
         }
         log.info("Spawned {} new Asteroids", amount);
@@ -108,9 +112,22 @@ public class Map {
         return row.getFields().get(rand.nextInt(row.getFields().size())); // get random field
     }
 
-    private Field getRandomEmptyField() throws StackOverflowError {
-        Field f = getRandomField();
-        return f.isEmpty() ? f : getRandomEmptyField(); // recursion call, can be a stackoverflow whey all fields in the map are not empty
+    private Field getRandomEmptyField() throws NoEmptyFieldsException {
+        final Set<Field> fields = new HashSet<>();
+        Field field = getRandomField();
+        final int maxFields = getFieldCount();
+        while (!field.isEmpty()) {
+            if (fields.size() == maxFields) {
+                throw new NoEmptyFieldsException();
+            }
+            field = getRandomField();
+            fields.add(field);
+        }
+        return field;
+    }
+
+    public int getFieldCount() {
+        return rows.get(0).getFields().size() * rows.size();
     }
 
 }
