@@ -57,13 +57,10 @@ public class GameController {
     }
 
     private boolean isMyTurn(UserRepository userRepository, int id) throws InterruptedException {
-        boolean stop = false;
-        while (!stop) {
+        while (!(Thread.currentThread().isInterrupted())) {
             if (userRepository.findById(id).get().myTurn()) {
-                stop = true;
                 return true;
             }
-            TimeUnit.SECONDS.sleep(2);
         }
         return false;
     }
