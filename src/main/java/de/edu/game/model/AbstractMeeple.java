@@ -28,7 +28,8 @@ public abstract class AbstractMeeple {
 
     private String name;
 
-    private String username;
+    @OneToOne
+    private User user;
 
     private String color;
 
@@ -42,11 +43,11 @@ public abstract class AbstractMeeple {
 
     private boolean hasMoved;
 
-    public AbstractMeeple(String username, Field field, String name, String color) {
+    public AbstractMeeple(User user, Field field, String name, String color) {
         this.field = field;
         this.name = name;
         this.color = color;
-        this.username = username;
+        this.user = user;
     }
 
     @Deprecated

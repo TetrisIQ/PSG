@@ -21,8 +21,8 @@ public class Transporter extends AbstractMeeple {
     @Autowired
     transient UserService userService;
 
-    public Transporter(String username, Field field, String name, String color) {
-        super(username, field, name, color);
+    public Transporter(User user, Field field, String name, String color) {
+        super(user, field, name, color);
         this.setAttackRange(ConfigLoader.shared.getTransporter().getAttackRange());
         this.setDamage(ConfigLoader.shared.getTransporter().getDamage());
         this.setDefense(ConfigLoader.shared.getTransporter().getDefense());
@@ -89,7 +89,7 @@ public class Transporter extends AbstractMeeple {
 
     private void addMiningPoints() {
         try {
-            userService.getUserByUsername(this.getUsername()).addPoints(5);
+            userService.getUserByUsername(this.getUser().getUsername()).addPoints(5);
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }

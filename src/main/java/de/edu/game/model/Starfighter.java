@@ -18,8 +18,8 @@ public class Starfighter extends AbstractMeeple {
     @Autowired
     private transient UserService userService;
 
-    public Starfighter(String username, Field field, String name, String color) {
-        super(username, field, name, color);
+    public Starfighter(User user, Field field, String name, String color) {
+        super(user, field, name, color);
         this.setAttackRange(ConfigLoader.shared.getStarfighter().getAttackRange());
         this.setDamage(ConfigLoader.shared.getStarfighter().getDamage());
         this.setDefense(ConfigLoader.shared.getStarfighter().getDefense());
@@ -52,7 +52,7 @@ public class Starfighter extends AbstractMeeple {
     public void attack(Field pos) throws CannotMoveButIAttackException, CannotAttackOwnMeeplesException {
         // Creating Dices for me and the enemy
         AbstractMeeple enemy = pos.getMeeple();
-        if (enemy.getUsername().equals(this.getUsername())) {
+        if (enemy.getUser().getUsername().equals(this.getUser().getUsername())) {
             // cannot attack my meeples
             throw new CannotAttackOwnMeeplesException();
         }
@@ -98,7 +98,7 @@ public class Starfighter extends AbstractMeeple {
                 points = ConfigLoader.shared.getPointsConfig().getDestroySpaceStation();
             if (enemy.getName().equals(ConfigLoader.shared.getTransporter().getName()))
                 points = ConfigLoader.shared.getPointsConfig().getDestroyTransporter();
-            userService.getUserByUsername(this.getUsername()).addPoints(points);
+            userService.getUserByUsername(this.getUser().getUsername()).addPoints(points);
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }

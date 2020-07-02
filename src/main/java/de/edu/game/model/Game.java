@@ -145,7 +145,7 @@ public class Game {
         for (User user : users) {
             // Spawn users Space Station
             Field field = this.map.findCoordinate(ConfigLoader.shared.getSpaceStations().get(i).getXCoordinate(), ConfigLoader.shared.getSpaceStations().get(i).getYCoordinate());
-            SpaceStation spaceStation = new SpaceStation(this.map, user.getUsername(), field, user.getColor());
+            SpaceStation spaceStation = new SpaceStation(user, field, user.getColor());
             user.setSpaceStation(spaceStation);
             field.setMeeple(spaceStation);
             spaceStation.spawnStarfighter(map, user);

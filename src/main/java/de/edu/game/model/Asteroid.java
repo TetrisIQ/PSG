@@ -14,7 +14,7 @@ public class Asteroid extends AbstractMeeple {
     private int energy; // this means "storage"
 
     public Asteroid(Field field) {
-        super("admin", field, ConfigLoader.shared.getAsteroid().getName(), ConfigLoader.shared.getAsteroid().getColor());
+        super(new User(), field, ConfigLoader.shared.getAsteroid().getName(), ConfigLoader.shared.getAsteroid().getColor()); // we can make a new empty user, because the Asteroid has no owner
         this.energy = ConfigLoader.shared.getAsteroid().getEnergy();
         this.setDefense("0d0");
         this.setHp(100);

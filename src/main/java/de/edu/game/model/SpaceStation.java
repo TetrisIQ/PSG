@@ -20,8 +20,8 @@ public class SpaceStation extends AbstractMeeple {
     private int storage = 520; // when starting the game
 
 
-    public SpaceStation(Map map, String username, Field field, String color) {
-        super(username, field, ConfigLoader.shared.getSpaceStation().getName(), color);
+    public SpaceStation(User user, Field field, String color) {
+        super(user, field, ConfigLoader.shared.getSpaceStation().getName(), color);
         this.setHp(ConfigLoader.shared.getSpaceStation().getHp());
         this.setDamage(ConfigLoader.shared.getSpaceStation().getDamage());
         this.setAttackRange(ConfigLoader.shared.getSpaceStation().getAttackRange());
@@ -32,7 +32,7 @@ public class SpaceStation extends AbstractMeeple {
             try {
                 List<Field> freeFields = findFreeFields(map);
                 Collections.shuffle(freeFields);
-                AbstractMeeple starfighter = new Transporter(this.getUsername(), freeFields.get(0), "Transporter", this.getColor());
+                AbstractMeeple starfighter = new Transporter(this.getUser(), freeFields.get(0), "Transporter", this.getColor());
                 freeFields.get(0).setMeeple(starfighter);
                 user.addMeeple(starfighter);
                 user.addPoints(ConfigLoader.shared.getPointsConfig().getCreateTransporter());
@@ -52,7 +52,7 @@ public class SpaceStation extends AbstractMeeple {
             try {
                 List<Field> freeFields = findFreeFields(map);
                 Collections.shuffle(freeFields);
-                AbstractMeeple starfighter = new Starfighter(this.getUsername(), freeFields.get(0), "Starfighter", this.getColor());
+                AbstractMeeple starfighter = new Starfighter(this.getUser(), freeFields.get(0), "Starfighter", this.getColor());
                 freeFields.get(0).setMeeple(starfighter);
                 user.addMeeple(starfighter);
                 user.addPoints(ConfigLoader.shared.getPointsConfig().getCreateStarfighter());

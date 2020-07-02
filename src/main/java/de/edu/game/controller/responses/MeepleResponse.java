@@ -21,14 +21,14 @@ public class MeepleResponse {
         this.id = meeple.getId();
         this.name = meeple.getName();
         this.color = meeple.getColor();
-        this.username = meeple.getUsername();
+        this.username = meeple.getUser().getUsername();
         if (meeple.getName().equals(ConfigLoader.shared.getTransporter().getName())) { //checks if meeple is a transporter
-            if (username.equals(meeple.getUsername())) { // Checks if the meeple is from the same player
+            if (username.equals(meeple.getUser().getUsername())) { // Checks if the meeple is from the same player
                 this.energieStorage = ((Transporter) meeple).getStorage();
             }
         }
         if(meeple.getName().equals(ConfigLoader.shared.getSpaceStation().getName())) {
-            if (username.equals(meeple.getUsername())) { // Checks if the meeple is from the same player
+            if (username.equals(meeple.getUser().getUsername())) { // Checks if the meeple is from the same player
                 this.energieStorage = ((SpaceStation) meeple).getStorage();
             }
         }
