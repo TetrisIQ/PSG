@@ -4,7 +4,7 @@ import de.edu.game.model.Game;
 import de.edu.game.model.User;
 import de.edu.game.repositorys.GameRepository;
 import de.edu.game.repositorys.UserRepository;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-@Log
+@Log4j2
 public class StartupRunner implements CommandLineRunner {
 
     @Autowired
@@ -32,14 +32,15 @@ public class StartupRunner implements CommandLineRunner {
         //String pw = generateString();
         //String user = generateString();
         User root = new User(0, "root", "none", encoder.encode(pw), user);
-        log.info("Root user     \t=> \t" + root.getUsername());
-        log.info("Root password \t=> \t" + pw);
+        log.info("Root user     \t=> \t {}", root.getUsername());
+        log.info("Root password \t=> \t {}", pw);
         userRepository.save(root);
 
         // Create Default Game
         gameRepository.save(new Game());
-        log.info("Default game Created, with id: " + gameRepository.getTheGame().toString());
+        log.info("Default game Created, with id: {}", gameRepository.getTheGame().toString());
 
+        // a small tool this sends a notification if the server is ready, but only on Linux computers
         try {
             String[] cmd = {"/usr/bin/notify-send",
                     "Server Ready"};
