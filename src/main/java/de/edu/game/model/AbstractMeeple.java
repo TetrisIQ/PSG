@@ -4,6 +4,7 @@ import de.edu.game.exceptions.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@Log4j2
 public abstract class AbstractMeeple {
 
     @Id
@@ -62,6 +64,10 @@ public abstract class AbstractMeeple {
     }
 
     public int makeDamage(int damage) {
+        if (damage < 0) {
+            log.warn("Cannot make negative Damage!");
+            return this.hp;
+        }
         this.hp -= damage;
         return this.hp;
     }
