@@ -69,22 +69,24 @@ public abstract class AbstractMeeple {
     public List<Field> getFieldsAround(Map map, Field field) {
         List<Field> returnList = new LinkedList<>();
         //right
-        returnList.add(map.findCoordinate(field.getCoordinate().getXCoordinate() + 1, field.getCoordinate().getYCoordinate()));
+        int xCoordinate = field.getCoordinate().getXCoordinate();
+        int yCoordinate = field.getCoordinate().getYCoordinate();
+        returnList.add(map.findCoordinate(xCoordinate + 1, yCoordinate));
         //left
-        returnList.add(map.findCoordinate(field.getCoordinate().getXCoordinate() - 1, field.getCoordinate().getYCoordinate()));
+        returnList.add(map.findCoordinate(xCoordinate - 1, yCoordinate));
         // up
-        returnList.add(map.findCoordinate(field.getCoordinate().getXCoordinate(), field.getCoordinate().getYCoordinate() - 1));
+        returnList.add(map.findCoordinate(xCoordinate, yCoordinate - 1));
         //down
-        returnList.add(map.findCoordinate(field.getCoordinate().getXCoordinate(), field.getCoordinate().getYCoordinate() + 1));
+        returnList.add(map.findCoordinate(xCoordinate, yCoordinate + 1));
         //Diagonal
         //right up
-        returnList.add(map.findCoordinate(field.getCoordinate().getXCoordinate() + 1, field.getCoordinate().getYCoordinate() - 1));
+        returnList.add(map.findCoordinate(xCoordinate + 1, yCoordinate - 1));
         //right down
-        returnList.add(map.findCoordinate(field.getCoordinate().getXCoordinate() + 1, field.getCoordinate().getYCoordinate() + 1));
+        returnList.add(map.findCoordinate(xCoordinate + 1, yCoordinate + 1));
         //left Up
-        returnList.add(map.findCoordinate(field.getCoordinate().getXCoordinate() - 1, field.getCoordinate().getYCoordinate() - 1));
+        returnList.add(map.findCoordinate(xCoordinate - 1, yCoordinate - 1));
         //left down
-        returnList.add(map.findCoordinate(field.getCoordinate().getXCoordinate() - 1, field.getCoordinate().getYCoordinate() + 1));
+        returnList.add(map.findCoordinate(xCoordinate - 1, yCoordinate + 1));
         return returnList;
     }
 
