@@ -59,8 +59,7 @@ public abstract class AbstractMeeple {
     }
 
     public boolean canMove(Map map, Field newField) {
-        Set<Field> set = new HashSet<>(getFieldsAround(map, this.getField()));
-        return set.contains(newField);
+        return getFieldsAround(map, this.getField()).contains(newField);
     }
 
     public int makeDamage(int damage) {
