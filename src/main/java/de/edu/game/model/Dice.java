@@ -8,7 +8,7 @@ import java.util.Random;
 public class Dice {
 
     private int high;
-    private Random random = new Random();
+    private static final Random RANDOM = new Random();
     private int low = 1;
     private int amount = 1;
     private int extra = 0;
@@ -34,7 +34,7 @@ public class Dice {
     }
 
     private int throwOneDice() {
-        return random.nextInt(high - low) + low;
+        return RANDOM.nextInt(high - low) + low;
     }
 
     private int throwDices(int amount) {
