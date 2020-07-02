@@ -43,7 +43,7 @@ public class ConfigLoader {
     private int SpaceStationMineSpeed = 10;
     private int maxRounds = 500;
     private MeepleConfig spaceStation = new MeepleConfig("SpaceStation", 400, "2w20+30", "2w20+30", 1, -1);
-    private TransporterConfig transporter = new TransporterConfig(100, "0d0","1d20+5",1,50,50,120);
+    private TransporterConfig transporter = new TransporterConfig(100, "0d0","1d20+5",1,50,50,100);
     private MeepleConfig starfighter = new MeepleConfig("Starfighter", 100, "2d20+24", "3d20+1",1, 120);
     private AsteroidConfig asteroid = new AsteroidConfig();
     private List<Coordinate> spaceStations = new ArrayList<>(Arrays.asList(new Coordinate(0, 1, 1), new Coordinate(0, 28, 1), new Coordinate(0, 1, 18), new Coordinate(0, 38, 18)));

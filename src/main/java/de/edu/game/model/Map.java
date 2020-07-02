@@ -54,7 +54,7 @@ public class Map {
         try {
             return rows.get(y).getFields().get(x);
         } catch (Exception ex) {
-            StringBuilder sb = new StringBuilder(); // TODO: evaluate if this overhead is necessary
+            StringBuilder sb = new StringBuilder();
             sb.append(ex.toString()).append("\toverflow, fixing indexing \t[ ");
             int xOld = x;
             int yOld = y;

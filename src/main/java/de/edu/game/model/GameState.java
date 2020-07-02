@@ -31,7 +31,7 @@ public class GameState {
         return this.state.equals(GameStates.PLAYING);
     }
 
-    private void nextState() {
+    public void nextState() {
         switch (this.state) {
             case LOBBY:
                 this.state = GameStates.PLAYING;

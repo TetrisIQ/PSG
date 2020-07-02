@@ -181,7 +181,7 @@ public class Game {
     }
 
 
-    @Override //TODO: Improve toString for the StartupRunner
+    @Override
     public String toString() {
         return Integer.toString(this.id);
     }

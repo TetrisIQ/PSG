@@ -1,5 +1,6 @@
 package de.edu.game.model;
 
+import de.edu.game.StartupRunner;
 import de.edu.game.config.loader.ConfigLoader;
 import de.edu.game.exceptions.CannotMineException;
 import de.edu.game.exceptions.CannotMoveException;
@@ -11,11 +12,12 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 public class Asteroid extends AbstractMeeple {
 
-    private int energy; // this means "storage"
+    private int energyStorage;
 
     public Asteroid(Field field) {
-        super(new User(), field, ConfigLoader.shared.getAsteroid().getName(), ConfigLoader.shared.getAsteroid().getColor()); // we can make a new empty user, because the Asteroid has no owner
-        this.energy = ConfigLoader.shared.getAsteroid().getEnergy();
+        //TODO: Check if this can case Nullpointer erros
+        super(StartupRunner.ADMIN, field, ConfigLoader.shared.getAsteroid().getName(), ConfigLoader.shared.getAsteroid().getColor()); // we can make a new empty user, because the Asteroid has no owner
+        this.energyStorage = ConfigLoader.shared.getAsteroid().getEnergy();
         this.setDefense("0d0");
         this.setHp(100);
 
@@ -23,14 +25,14 @@ public class Asteroid extends AbstractMeeple {
 
 
     public int mine(int energyToMine) throws CannotMineException {
-        if (this.energy > 0) {
-            if (this.energy - energyToMine > 0) {
+        if (this.energyStorage > 0) {
+            if (this.energyStorage - energyToMine > 0) {
                 // there is more energy to mine the Asteroid is still there
-                this.energy -= energyToMine;
+                this.energyStorage -= energyToMine;
                 return energyToMine;
             } else {
-                int delta = this.energy;
-                this.energy = -1;
+                int delta = this.energyStorage;
+                this.energyStorage = -1;
                 this.getField().setEmpty(); // disappear the asteroid
                 return delta;
             }

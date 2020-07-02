@@ -8,6 +8,7 @@ import de.edu.game.exceptions.NotAuthorizedException;
 import de.edu.game.model.*;
 import de.edu.game.repositorys.GameRepository;
 import de.edu.game.repositorys.MapRepository;
+import jdk.nashorn.internal.objects.annotations.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -39,16 +41,21 @@ public class AdminController {
     @ResponseStatus(code = HttpStatus.OK)
     public void startGame() throws GameAlreadyStartedException, NotAuthorizedException {
         hasAuthority();
-        Game game = gameRepository.getTheGame();
-        if (game.startGame(gameRepository)) {
-            log.info("Game Started with {} player", game.getUsers().size());
-            mapRepository.save(game.getMap());
-            gameRepository.save(game);
-            log.info(game.getMap().toString());
-        } else {
-            //game is already started
-            log.warn("Game is already started. Cannot start the Game");
-            throw new GameAlreadyStartedException();
+        try {
+            Game game = gameRepository.getTheGame();
+            if (game.startGame(gameRepository)) {
+                log.info("Game Started with {} player", game.getUsers().size());
+                mapRepository.save(game.getMap());
+                gameRepository.save(game);
+                log.info(game.getMap().toString());
+            } else {
+                //game is already started
+                log.warn("Game is already started. Cannot start the Game");
+                throw new GameAlreadyStartedException();
+            }
+        }catch (IndexOutOfBoundsException ex){
+            log.warn("No Player joined the Game game cannot Started");
+            System.exit(-1);
         }
     }
 
@@ -90,6 +97,21 @@ public class AdminController {
     }
 
 
+ //   @Scheduled(fixedDelay = 1000)
+    private void testIfWin() {
+        List<User> users = gameRepository.getTheGame().getUsers();
+        if(users.size() == 1) {
+            // if there is only one player the game is over and the user has win the game
+            log.info("#########################################################################");
+            log.info(users.get(0).getUsername() + " win the Game");
+            log.info("#########################################################################");
+            Game game = gameRepository.getTheGame();
+            game.getState().nextState();
+            gameRepository.save(game);
+        }
+    }
+
+
     @GetMapping("/map")
     public DeferredResult<MapResponse> getMapIfUpdates() throws NotAuthorizedException {
         hasAuthority();
@@ -106,6 +128,7 @@ public class AdminController {
                 ex.printStackTrace();
             }
         });
+
         return deferredResult;
     }
 

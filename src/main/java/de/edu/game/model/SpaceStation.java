@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 public class SpaceStation extends AbstractMeeple {
 
-    private int storage = 520; // when starting the game
+    private int storage = 520; // when starting the game // 2x100 for Transporter 1x120 for Starfighter -> 200 rest
 
 
     public SpaceStation(User user, Field field, String color) {
@@ -36,6 +36,8 @@ public class SpaceStation extends AbstractMeeple {
                 freeFields.get(0).setMeeple(starfighter);
                 user.addMeeple(starfighter);
                 user.addPoints(ConfigLoader.shared.getPointsConfig().getCreateTransporter());
+                this.storage -= ConfigLoader.shared.getTransporter().getCoasts();
+
                 return true;
             } catch (IndexOutOfBoundsException ex) {
                 // No empty fields to spawn Meeples
@@ -56,6 +58,7 @@ public class SpaceStation extends AbstractMeeple {
                 freeFields.get(0).setMeeple(starfighter);
                 user.addMeeple(starfighter);
                 user.addPoints(ConfigLoader.shared.getPointsConfig().getCreateStarfighter());
+                this.storage -= ConfigLoader.shared.getStarfighter().getCoasts();
                 return true;
             } catch (IndexOutOfBoundsException ex) {
                 // No empty fields to spawn Meeples

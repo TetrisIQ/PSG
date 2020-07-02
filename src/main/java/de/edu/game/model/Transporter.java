@@ -2,7 +2,10 @@ package de.edu.game.model;
 
 import de.edu.game.config.UserService;
 import de.edu.game.config.loader.ConfigLoader;
-import de.edu.game.exceptions.*;
+import de.edu.game.exceptions.CannotMineException;
+import de.edu.game.exceptions.CannotMoveException;
+import de.edu.game.exceptions.HasAlreadyMovedException;
+import de.edu.game.exceptions.StorageFullException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +17,9 @@ import javax.persistence.Entity;
 @Getter
 public class Transporter extends AbstractMeeple {
 
-    private int storage = ConfigLoader.shared.getAsteroid().getEnergy();
-    private int maxStorage;
-    private int mineSpeed;
+    private int storage = 0;
+    private int maxStorage = ConfigLoader.shared.getTransporter().getMaxStorage();
+    private int mineSpeed = ConfigLoader.shared.getTransporter().getMineSpeed();
 
     @Autowired
     transient UserService userService;
@@ -88,11 +91,7 @@ public class Transporter extends AbstractMeeple {
     }
 
     private void addMiningPoints() {
-        try {
-            userService.getUserByUsername(this.getUser().getUsername()).addPoints(5);
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-        }
+        this.getUser().addPoints(5);
     }
 
     @Override
