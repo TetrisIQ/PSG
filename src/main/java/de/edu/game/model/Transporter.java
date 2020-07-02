@@ -5,7 +5,6 @@ import de.edu.game.config.loader.ConfigLoader;
 import de.edu.game.exceptions.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Entity;
@@ -47,14 +46,13 @@ public class Transporter extends AbstractMeeple {
             } else {
                 // if the position is not empty, a Transporter will not attack
                 // if the position is not empty and the other meeple is an Asteroid the Transporter will start mining if possible
-                if(newPos.getMeeple().getName().equals(ConfigLoader.shared.getAsteroid().getName())) {
-                    return checkandMine(newPos);
+                if (newPos.getMeeple().getName().equals(ConfigLoader.shared.getAsteroid().getName())) {
+                    return checkAndMine(newPos);
                 }
                 // if the position is not empty and the other meeple is a SpaceStation the Transporter will start deploying the energy to the SpaceStation
-                if(newPos.getMeeple().getName().equals(ConfigLoader.shared.getSpaceStation().getName())) {
+                if (newPos.getMeeple().getName().equals(ConfigLoader.shared.getSpaceStation().getName())) {
                     return deployToSpaceStation(newPos);
-                }
-                else {
+                } else {
                     this.setHasMoved(false); // The transporter can move to an other field
                     return false;
                 }
@@ -74,11 +72,13 @@ public class Transporter extends AbstractMeeple {
         return true;
     }
 
-    private boolean checkandMine(Field newPos) throws CannotMineException, StorageFullException {
+    private boolean checkAndMine(Field newPos) throws CannotMineException, StorageFullException {
         Asteroid asteroid = (Asteroid) newPos.getMeeple();
-        if(this.storage < this.maxStorage) { // check if there is capacity
-            int mine = asteroid.mine(this.mineSpeed);
-            this.storage = mine;
+        if (this.storage < this.maxStorage) { // check if there is capacity
+            int storageLeft = this.maxStorage - this.storage; // checks how much storage is available
+            int nextMining = storageLeft < this.mineSpeed ? storageLeft : this.mineSpeed; // if there are more storage left as we can mine in one round, we can mine 100% this round, otherwiese we mine only so much our storage can hold
+            int mine = asteroid.mine(nextMining);
+            this.storage += mine;
             this.setHasMoved(true);
             addMiningPoints();
             return true;
