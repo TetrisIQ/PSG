@@ -2,10 +2,7 @@ package de.edu.game.model;
 
 import de.edu.game.config.loader.ConfigLoader;
 import de.edu.game.exceptions.NoEmptyFieldsException;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.*;
 import java.util.*;
@@ -14,12 +11,9 @@ import java.util.*;
  * Model class containing the most Map logic
  */
 @Entity
-@NoArgsConstructor
-@ToString
-@Getter
-@Log4j2
 public class Map {
 
+    private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(Map.class);
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -31,6 +25,9 @@ public class Map {
         for (int y = 0; y < rows; y++) {
             this.rows.add(new Row(y, columns));
         }
+    }
+
+    public Map() {
     }
 
     /**
@@ -161,4 +158,15 @@ public class Map {
         return rows.get(0).getFields().size() * rows.size();
     }
 
+    public int getId() {
+        return this.id;
+    }
+
+    public List<Row> getRows() {
+        return this.rows;
+    }
+
+    public String toString() {
+        return "Map(id=" + this.getId() + ", rows=" + this.getRows() + ")";
+    }
 }

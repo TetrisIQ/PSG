@@ -1,9 +1,5 @@
 package de.edu.game.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +8,6 @@ import java.util.List;
  * Model Class for Rows on the {@link Map}
  */
 @Entity(name = "rows") //row is an SQL key words
-@NoArgsConstructor
-@ToString
-@Getter
 public class Row {
 
     @Id
@@ -28,5 +21,20 @@ public class Row {
         for (int x = 0; x < length; x++) {
             fields.add(new Field(x, y));
         }
+    }
+
+    public Row() {
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public List<Field> getFields() {
+        return this.fields;
+    }
+
+    public String toString() {
+        return "Row(id=" + this.getId() + ", fields=" + this.getFields() + ")";
     }
 }

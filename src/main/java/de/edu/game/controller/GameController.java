@@ -8,7 +8,7 @@ import de.edu.game.repositorys.GameRepository;
 import de.edu.game.repositorys.MapRepository;
 import de.edu.game.repositorys.MeepleRepository;
 import de.edu.game.repositorys.UserRepository;
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +24,9 @@ import java.util.concurrent.CompletableFuture;
  */
 @RestController
 @RequestMapping("/game")
-@Log4j2
 public class GameController {
 
+    private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(GameController.class);
     @Autowired
     private UserRepository userRepository;
 

@@ -9,7 +9,7 @@ import de.edu.game.model.*;
 import de.edu.game.repositorys.GameRepository;
 import de.edu.game.repositorys.MapRepository;
 import de.edu.game.repositorys.UserRepository;
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -27,10 +27,10 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @RequestMapping("/admin")
 @CrossOrigin(origins = "http://localhost:8080")
-@Log4j2
 @EnableScheduling
 public class AdminController {
 
+    private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(AdminController.class);
     @Autowired
     private GameRepository gameRepository;
 

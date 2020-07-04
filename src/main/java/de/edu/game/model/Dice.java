@@ -1,15 +1,14 @@
 package de.edu.game.model;
 
-import lombok.extern.java.Log;
-
 import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * Model Class to represent dices
  */
-@Log
 public class Dice {
 
+    private static final Logger log = Logger.getLogger(Dice.class.getName());
     private int high;
     private static final Random RANDOM = new Random();
     private int low = 1;

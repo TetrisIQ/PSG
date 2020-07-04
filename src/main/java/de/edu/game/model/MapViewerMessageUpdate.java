@@ -1,18 +1,18 @@
 package de.edu.game.model;
 
-import lombok.NoArgsConstructor;
-
 /**
  * Small Class to manage Updates on the Map <br>
  * Used by the <a href="https://github.com/TetrisIQ/PSG-MapViewer">Map-Viewer</a> <br>
  * Can also handle update messages
  */
-@NoArgsConstructor
 public class MapViewerMessageUpdate {
 
     public static boolean hasChange = false;
 
     public static String message = "";
+
+    public MapViewerMessageUpdate() {
+    }
 
     public static void updateMap() {
         message = "Update";

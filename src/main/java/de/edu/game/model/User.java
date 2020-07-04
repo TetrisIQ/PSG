@@ -1,10 +1,6 @@
 package de.edu.game.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -13,14 +9,10 @@ import java.util.List;
 /**
  * Model class for a User
  */
-@Getter
-@Setter
 @Entity
-@ToString
-@NoArgsConstructor
-@Log4j2
 public class User {
 
+    private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(User.class);
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -50,6 +42,9 @@ public class User {
         this.color = color;
         this.password = password;
         this.username = username;
+    }
+
+    public User() {
     }
 
     /**
@@ -103,5 +98,81 @@ public class User {
      */
     public void addPoints(int points) {
         this.victoryPoints += points;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public String getRole() {
+        return this.role;
+    }
+
+    public String getColor() {
+        return this.color;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public int getVictoryPoints() {
+        return this.victoryPoints;
+    }
+
+    public SpaceStation getSpaceStation() {
+        return this.spaceStation;
+    }
+
+    public List<AbstractMeeple> getMeepleList() {
+        return this.meepleList;
+    }
+
+    public UserState getState() {
+        return this.state;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setVictoryPoints(int victoryPoints) {
+        this.victoryPoints = victoryPoints;
+    }
+
+    public void setSpaceStation(SpaceStation spaceStation) {
+        this.spaceStation = spaceStation;
+    }
+
+    public void setMeepleList(List<AbstractMeeple> meepleList) {
+        this.meepleList = meepleList;
+    }
+
+    public void setState(UserState state) {
+        this.state = state;
+    }
+
+    public String toString() {
+        return "User(id=" + this.getId() + ", role=" + this.getRole() + ", color=" + this.getColor() + ", password=" + this.getPassword() + ", username=" + this.getUsername() + ", victoryPoints=" + this.getVictoryPoints() + ", spaceStation=" + this.getSpaceStation() + ", meepleList=" + this.getMeepleList() + ", state=" + this.getState() + ")";
     }
 }

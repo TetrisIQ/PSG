@@ -1,10 +1,7 @@
 package de.edu.game.model;
 
 import de.edu.game.exceptions.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -14,12 +11,9 @@ import java.util.List;
  * Abstract meeple Class
  */
 @Entity
-@NoArgsConstructor
-@Getter
-@Setter
-@Log4j2
 public abstract class AbstractMeeple {
 
+    private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(AbstractMeeple.class);
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -49,6 +43,9 @@ public abstract class AbstractMeeple {
         this.name = name;
         this.color = color;
         this.user = user;
+    }
+
+    public AbstractMeeple() {
     }
 
     /**
@@ -156,5 +153,81 @@ public abstract class AbstractMeeple {
     @Override
     public String toString() {
         return name + "-" + color;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public String getColor() {
+        return this.color;
+    }
+
+    public int getShieldEnergy() {
+        return this.shieldEnergy;
+    }
+
+    public String getDamage() {
+        return this.damage;
+    }
+
+    public String getDefense() {
+        return this.defense;
+    }
+
+    public int getAttackRange() {
+        return this.attackRange;
+    }
+
+    public boolean isHasMoved() {
+        return this.hasMoved;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setField(Field field) {
+        this.field = field;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setShieldEnergy(int shieldEnergy) {
+        this.shieldEnergy = shieldEnergy;
+    }
+
+    public void setDamage(String damage) {
+        this.damage = damage;
+    }
+
+    public void setDefense(String defense) {
+        this.defense = defense;
+    }
+
+    public void setAttackRange(int attackRange) {
+        this.attackRange = attackRange;
+    }
+
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
     }
 }

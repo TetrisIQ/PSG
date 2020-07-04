@@ -1,10 +1,5 @@
 package de.edu.game.config.loader;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@AllArgsConstructor
-@Getter
 /**
  * Configuration for Transporter
  */
@@ -17,5 +12,18 @@ public class TransporterConfig extends MeepleConfig {
         super("Transporter", hp, damage, defense, attackRange, coasts);
         this.mineSpeed = mineSpeed;
         this.maxStorage = maxStorage;
+    }
+
+    public TransporterConfig(int maxStorage, int mineSpeed) {
+        this.maxStorage = maxStorage;
+        this.mineSpeed = mineSpeed;
+    }
+
+    public int getMaxStorage() {
+        return this.maxStorage;
+    }
+
+    public int getMineSpeed() {
+        return this.mineSpeed;
     }
 }

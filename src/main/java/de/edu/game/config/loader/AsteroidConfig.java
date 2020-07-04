@@ -1,12 +1,5 @@
 package de.edu.game.config.loader;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@AllArgsConstructor
-@Getter
-@NoArgsConstructor
 /**
  * Configuration for Asteroids
  */
@@ -24,4 +17,39 @@ public class AsteroidConfig {
 
     private int maxAsteroids = 20;
 
+    public AsteroidConfig(String name, int hp, int mineRange, int energy, String color, int maxAsteroids) {
+        this.name = name;
+        this.hp = hp;
+        this.mineRange = mineRange;
+        this.energy = energy;
+        this.color = color;
+        this.maxAsteroids = maxAsteroids;
+    }
+
+    public AsteroidConfig() {
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getHp() {
+        return this.hp;
+    }
+
+    public int getMineRange() {
+        return this.mineRange;
+    }
+
+    public int getEnergy() {
+        return this.energy;
+    }
+
+    public String getColor() {
+        return this.color;
+    }
+
+    public int getMaxAsteroids() {
+        return this.maxAsteroids;
+    }
 }

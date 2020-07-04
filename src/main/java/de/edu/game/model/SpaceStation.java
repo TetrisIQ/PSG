@@ -3,9 +3,7 @@ package de.edu.game.model;
 import de.edu.game.config.loader.ConfigLoader;
 import de.edu.game.exceptions.CannotMoveException;
 import de.edu.game.exceptions.SpaceStationCannotMoveException;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.Entity;
 import java.util.Collections;
@@ -16,11 +14,9 @@ import java.util.List;
  * Model calls witch represents a SpaceStation
  */
 @Entity
-@NoArgsConstructor
-@Log4j2
-@Getter
 public class SpaceStation extends AbstractMeeple {
 
+    private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(SpaceStation.class);
     private int storage = 520; // when starting the game // 2x100 for Transporter 1x120 for Starfighter -> 200 rest
 
 
@@ -29,6 +25,9 @@ public class SpaceStation extends AbstractMeeple {
         this.setShieldEnergy(ConfigLoader.shared.getSpaceStation().getHp());
         this.setDamage(ConfigLoader.shared.getSpaceStation().getDamage());
         this.setAttackRange(ConfigLoader.shared.getSpaceStation().getAttackRange());
+    }
+
+    public SpaceStation() {
     }
 
     /**
@@ -128,5 +127,9 @@ public class SpaceStation extends AbstractMeeple {
     @Override
     public void attack(Field pos) {
 
+    }
+
+    public int getStorage() {
+        return this.storage;
     }
 }

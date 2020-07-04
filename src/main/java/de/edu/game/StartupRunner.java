@@ -4,7 +4,7 @@ import de.edu.game.model.Game;
 import de.edu.game.model.User;
 import de.edu.game.repositorys.GameRepository;
 import de.edu.game.repositorys.UserRepository;
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,13 +16,13 @@ import java.util.UUID;
  * Class witch will be called on startup of Spring Boot
  */
 @Component
-@Log4j2
 public class StartupRunner implements CommandLineRunner {
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     private static final String pw = "123"; // TODO: use Random passowrd for admin account
     private static final String user = "admin";
     public static final User ADMIN = new User(0, "root", "none", encoder.encode(pw), user);
+    private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(StartupRunner.class);
 
     @Autowired
     private UserRepository userRepository;

@@ -6,8 +6,6 @@ import de.edu.game.exceptions.CannotMineException;
 import de.edu.game.exceptions.CannotMoveException;
 import de.edu.game.exceptions.HasAlreadyMovedException;
 import de.edu.game.exceptions.StorageFullException;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Entity;
@@ -16,8 +14,6 @@ import javax.persistence.Entity;
  * Model Class witch represents a Transporter
  */
 @Entity
-@NoArgsConstructor
-@Getter
 public class Transporter extends AbstractMeeple {
 
     private int storage = 0;
@@ -34,6 +30,9 @@ public class Transporter extends AbstractMeeple {
         this.setDefense(ConfigLoader.shared.getTransporter().getDefense());
         this.maxStorage = ConfigLoader.shared.getTransporter().getMaxStorage();
         this.mineSpeed = ConfigLoader.shared.getTransporter().getMineSpeed();
+    }
+
+    public Transporter() {
     }
 
     /**
@@ -139,5 +138,21 @@ public class Transporter extends AbstractMeeple {
     @Override
     public String toString() {
         return "Transporter-" + this.getColor() + "-" + this.isHasMoved();
+    }
+
+    public int getStorage() {
+        return this.storage;
+    }
+
+    public int getMaxStorage() {
+        return this.maxStorage;
+    }
+
+    public int getMineSpeed() {
+        return this.mineSpeed;
+    }
+
+    public UserService getUserService() {
+        return this.userService;
     }
 }

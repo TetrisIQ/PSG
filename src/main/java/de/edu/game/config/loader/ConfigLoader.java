@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import de.edu.game.model.Coordinate;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,8 +13,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@RequiredArgsConstructor
-@Getter
 /**
  * loads the Configuration from conf.json <br>
  *     and serve them to the Model
@@ -57,6 +53,9 @@ public class ConfigLoader {
     private List<String> colors = new ArrayList<>(Arrays.asList("#ff0000", "#0033ff", "#06b500", "#aa00ff", "#f5930a"));
     private VictoryPointsConfig pointsConfig = new VictoryPointsConfig();
 
+    public ConfigLoader() {
+    }
+
 
     /**
      * Picks a random color from the @colors and remove them from the list, <br>
@@ -71,4 +70,59 @@ public class ConfigLoader {
         return color;
     }
 
+    public long getTimeoutInRounds() {
+        return this.timeoutInRounds;
+    }
+
+    public int getMaxPlayer() {
+        return this.maxPlayer;
+    }
+
+    public long getTimeAfterRound() {
+        return this.timeAfterRound;
+    }
+
+    public int getRows() {
+        return this.rows;
+    }
+
+    public int getColumns() {
+        return this.columns;
+    }
+
+    public int getSpaceStationMineSpeed() {
+        return this.SpaceStationMineSpeed;
+    }
+
+    public int getMaxRounds() {
+        return this.maxRounds;
+    }
+
+    public MeepleConfig getSpaceStation() {
+        return this.spaceStation;
+    }
+
+    public TransporterConfig getTransporter() {
+        return this.transporter;
+    }
+
+    public MeepleConfig getStarfighter() {
+        return this.starfighter;
+    }
+
+    public AsteroidConfig getAsteroid() {
+        return this.asteroid;
+    }
+
+    public List<Coordinate> getSpaceStations() {
+        return this.spaceStations;
+    }
+
+    public List<String> getColors() {
+        return this.colors;
+    }
+
+    public VictoryPointsConfig getPointsConfig() {
+        return this.pointsConfig;
+    }
 }

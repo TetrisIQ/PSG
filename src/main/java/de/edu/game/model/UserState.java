@@ -1,7 +1,5 @@
 package de.edu.game.model;
 
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,9 +9,11 @@ import javax.persistence.Id;
  * Model Class representing the state of the {@link User}
  */
 @Entity
-@NoArgsConstructor
 public class UserState {
 
+
+    public UserState() {
+    }
 
     /**
      * States of the {@link User}

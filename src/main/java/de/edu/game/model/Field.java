@@ -1,8 +1,5 @@
 package de.edu.game.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -10,8 +7,6 @@ import java.util.Objects;
  * Model Class of a Field on the @{@link Map}
  */
 @Entity
-@NoArgsConstructor
-@Getter
 public class Field {
 
     @Id
@@ -26,6 +21,9 @@ public class Field {
 
     public Field(int x, int y) {
         this.coordinate = new Coordinate(0, x, y);
+    }
+
+    public Field() {
     }
 
     public void setMeeple(AbstractMeeple meeple) {
@@ -50,4 +48,15 @@ public class Field {
         return Objects.hash(coordinate.getXCoordinate(), coordinate.getYCoordinate());
     }
 
+    public int getId() {
+        return this.id;
+    }
+
+    public Coordinate getCoordinate() {
+        return this.coordinate;
+    }
+
+    public AbstractMeeple getMeeple() {
+        return this.meeple;
+    }
 }

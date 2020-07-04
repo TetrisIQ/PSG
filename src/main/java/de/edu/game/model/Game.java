@@ -2,9 +2,7 @@ package de.edu.game.model;
 
 import de.edu.game.config.loader.ConfigLoader;
 import de.edu.game.repositorys.GameRepository;
-import lombok.Getter;
-import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.*;
 import java.util.*;
@@ -14,10 +12,9 @@ import java.util.concurrent.TimeUnit;
  * Model Class witch represents the most game logic
  */
 @Entity
-@Getter
-@Log4j2
 public class Game {
 
+    private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(Game.class);
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -112,7 +109,6 @@ public class Game {
      *
      * @param gameRepository {@link GameRepository} to get updated information later
      */
-    @SneakyThrows
     private void schedule(GameRepository gameRepository) {
         Thread thread;
         if (this.threadId == -1) { // First Thread started
@@ -245,4 +241,43 @@ public class Game {
     }
 
 
+    public int getId() {
+        return this.id;
+    }
+
+    public long getTimeoutRound() {
+        return this.timeoutRound;
+    }
+
+    public GameState getState() {
+        return this.state;
+    }
+
+    public long getTimeAfterRound() {
+        return this.timeAfterRound;
+    }
+
+    public List<User> getUsers() {
+        return this.users;
+    }
+
+    public int getUserTurnIndex() {
+        return this.userTurnIndex;
+    }
+
+    public Map getMap() {
+        return this.map;
+    }
+
+    public long getThreadId() {
+        return this.threadId;
+    }
+
+    public int getRoundCounter() {
+        return this.roundCounter;
+    }
+
+    public int getMaxRounds() {
+        return this.maxRounds;
+    }
 }

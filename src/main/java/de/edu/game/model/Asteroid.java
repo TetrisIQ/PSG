@@ -4,8 +4,6 @@ import de.edu.game.StartupRunner;
 import de.edu.game.config.loader.ConfigLoader;
 import de.edu.game.exceptions.CannotMineException;
 import de.edu.game.exceptions.CannotMoveException;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 
@@ -13,8 +11,6 @@ import javax.persistence.Entity;
  * Model Class that represents an Asteroid
  */
 @Entity
-@NoArgsConstructor
-@Getter
 public class Asteroid extends AbstractMeeple {
 
     private int energyStorage;
@@ -25,6 +21,9 @@ public class Asteroid extends AbstractMeeple {
         this.setDefense("0d0");
         this.setShieldEnergy(100);
 
+    }
+
+    public Asteroid() {
     }
 
     /**
@@ -73,5 +72,9 @@ public class Asteroid extends AbstractMeeple {
     @Override
     public void attack(Field pos) throws CannotMoveException {
         throw new CannotMoveException();
+    }
+
+    public int getEnergyStorage() {
+        return this.energyStorage;
     }
 }

@@ -1,12 +1,7 @@
 package de.edu.game.controller.responses;
 
 import de.edu.game.model.User;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
 /**
  * Response Object for the @{@link User}
  */
@@ -20,5 +15,28 @@ public class UserResponse {
         this.username = user.getUsername();
         this.color = user.getColor();
         this.state = user.getState().toString();
+    }
+
+    public UserResponse(String username, String clearPassword, String color, String state) {
+        this.username = username;
+        this.clearPassword = clearPassword;
+        this.color = color;
+        this.state = state;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public String getClearPassword() {
+        return this.clearPassword;
+    }
+
+    public String getColor() {
+        return this.color;
+    }
+
+    public String getState() {
+        return this.state;
     }
 }

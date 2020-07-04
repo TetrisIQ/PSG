@@ -1,9 +1,5 @@
 package de.edu.game.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,9 +9,6 @@ import javax.persistence.Id;
  * Model Class to represent a Coordinate
  */
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
 public class Coordinate {
 
     @Id
@@ -25,8 +18,29 @@ public class Coordinate {
     private int xCoordinate;
     private int yCoordinate;
 
+    public Coordinate(int id, int xCoordinate, int yCoordinate) {
+        this.id = id;
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
+    }
+
+    public Coordinate() {
+    }
+
     @Override
     public String toString() {
         return this.xCoordinate + " " + this.yCoordinate;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public int getXCoordinate() {
+        return this.xCoordinate;
+    }
+
+    public int getYCoordinate() {
+        return this.yCoordinate;
     }
 }

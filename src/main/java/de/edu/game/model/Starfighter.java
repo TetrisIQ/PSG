@@ -5,7 +5,6 @@ import de.edu.game.config.loader.ConfigLoader;
 import de.edu.game.exceptions.CannotAttackOwnMeeplesException;
 import de.edu.game.exceptions.CannotMoveButIAttackException;
 import de.edu.game.exceptions.HasAlreadyMovedException;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Entity;
@@ -14,7 +13,6 @@ import javax.persistence.Entity;
  * Model Class witch represents a Starfighter
  */
 @Entity
-@NoArgsConstructor
 public class Starfighter extends AbstractMeeple {
 
     @Autowired
@@ -25,6 +23,9 @@ public class Starfighter extends AbstractMeeple {
         this.setAttackRange(ConfigLoader.shared.getStarfighter().getAttackRange());
         this.setDamage(ConfigLoader.shared.getStarfighter().getDamage());
         this.setDefense(ConfigLoader.shared.getStarfighter().getDefense());
+    }
+
+    public Starfighter() {
     }
 
     /**
