@@ -10,6 +10,9 @@ import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Model class for a User
+ */
 @Getter
 @Setter
 @Entity
@@ -49,6 +52,11 @@ public class User {
         this.username = username;
     }
 
+    /**
+     * Finish tuns for the user
+     *
+     * @return True if the user has finished his turn
+     */
     public boolean finishTurn() {
         if (this.myTurn()) {
             this.state.nextState();
@@ -58,27 +66,41 @@ public class User {
         return false;
     }
 
-    public boolean playerReady(User user) {
-        return false;
-    }
-
-
+    /**
+     * Return True if the State of the User is myTurn
+     *
+     * @return True if the user is on Turn
+     */
     public boolean myTurn() {
         return state.isMyturn();
     }
 
-    public boolean addMeeple(AbstractMeeple meeple) {
+
+    /**
+     * Add a meeple to the users meeple List
+     *
+     * @param meeple The {@link AbstractMeeple} to add
+     */
+    public void addMeeple(AbstractMeeple meeple) {
         if (meeple.getName().equals("SpaceStation")) {
             log.warn("SpaceStations should not be in the meeple list. Use the property spaceStation instead!");
-            return false;
+            return;
         }
-        return this.meepleList.add(meeple);
+        this.meepleList.add(meeple);
     }
 
+    /**
+     * Next state of the user
+     */
     public void next() {
         this.state.nextState();
     }
 
+    /**
+     * add Victory points to the user
+     *
+     * @param points victoryPoints to add
+     */
     public void addPoints(int points) {
         this.victoryPoints += points;
     }

@@ -7,14 +7,13 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
+/**
+ * Response Object for the @{@link User}
+ */
 public class UserResponse {
-    @ApiModelProperty(value = "TetrisIQ")
     private String username;
-    @ApiModelProperty("doNotUsePassword")
     private String clearPassword;
-    @ApiModelProperty("red")
     private String color;
-    @ApiModelProperty("READY")
     private String state;
 
     public UserResponse(User user) {

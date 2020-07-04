@@ -1,6 +1,5 @@
 package de.edu.game.model;
 
-import jdk.nashorn.internal.runtime.logging.Logger;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Model Class to represent a Coordinate
+ */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

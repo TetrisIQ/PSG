@@ -5,6 +5,9 @@ import de.edu.game.model.Map;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Response Object for the @{@link Map}
+ */
 public class MapResponse {
 
     public List<RowResponse> rows = new LinkedList<>();

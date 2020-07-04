@@ -2,8 +2,10 @@ package de.edu.game.controller.responses;
 
 import de.edu.game.model.Coordinate;
 import de.edu.game.model.Field;
-import lombok.AllArgsConstructor;
 
+/**
+ * Response Object for the @{@link Field}
+ */
 public class FieldResponse {
 
     public int id;

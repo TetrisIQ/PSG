@@ -16,6 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+/**
+ * Security Configuration
+ */
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
@@ -36,6 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    /**
+     * Configure Secured Endpoints
+     */
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.cors();
@@ -57,9 +63,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic();
     }
-
-
-
 
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {

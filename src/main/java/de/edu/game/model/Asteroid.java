@@ -4,26 +4,36 @@ import de.edu.game.StartupRunner;
 import de.edu.game.config.loader.ConfigLoader;
 import de.edu.game.exceptions.CannotMineException;
 import de.edu.game.exceptions.CannotMoveException;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 
+/**
+ * Model Class that represents an Asteroid
+ */
 @Entity
 @NoArgsConstructor
+@Getter
 public class Asteroid extends AbstractMeeple {
 
     private int energyStorage;
 
     public Asteroid(Field field) {
-        //TODO: Check if this can case Nullpointer erros
         super(StartupRunner.ADMIN, field, ConfigLoader.shared.getAsteroid().getName(), ConfigLoader.shared.getAsteroid().getColor()); // we can make a new empty user, because the Asteroid has no owner
         this.energyStorage = ConfigLoader.shared.getAsteroid().getEnergy();
         this.setDefense("0d0");
-        this.setHp(100);
+        this.setShieldEnergy(100);
 
     }
 
-
+    /**
+     * Mine energy on the {@link Asteroid}
+     *
+     * @param energyToMine How much energy should be mined
+     * @return the amount of mined energy
+     * @throws CannotMineException The meeple (@{@link Transporter}) cannot mine here
+     */
     public int mine(int energyToMine) throws CannotMineException {
         if (this.energyStorage > 0) {
             if (this.energyStorage - energyToMine > 0) {
@@ -43,11 +53,23 @@ public class Asteroid extends AbstractMeeple {
         }
     }
 
+    /**
+     * Asteroids cannot move on the map, They always throw an {@link CannotMoveException}
+     * @param map      The @{@link Map}
+     * @param newField the new Field where the meeple should move
+     * @return always {@link CannotMoveException}
+     * @throws CannotMoveException Returning allays a {@link CannotMineException}
+     */
     @Override
-    public boolean move(Map map, Field newPos) throws CannotMoveException {
+    public boolean move(Map map, Field newField) throws CannotMoveException {
         throw new CannotMoveException();
     }
 
+    /**
+     *
+     * @param pos {@link Field} where the other meeple stands on
+     * @throws CannotMoveException Returning allays a {@link CannotMineException}
+     */
     @Override
     public void attack(Field pos) throws CannotMoveException {
         throw new CannotMoveException();

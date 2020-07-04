@@ -7,11 +7,12 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
+/**
+ * Abstract meeple Class
+ */
 @Entity
 @NoArgsConstructor
 @Getter
@@ -33,7 +34,7 @@ public abstract class AbstractMeeple {
 
     private String color;
 
-    private int hp;
+    private int shieldEnergy;
 
     private String damage;
 
@@ -50,33 +51,64 @@ public abstract class AbstractMeeple {
         this.user = user;
     }
 
+    /**
+     * Get the Field of the meeple over the @{@link Map}
+     *
+     * @param map {@link Map}
+     * @return {@link Field} where the meeple stands on
+     */
     @Deprecated
     public Field getField(Map map) {
         return map.findCoordinate(field.getCoordinate().getXCoordinate(), field.getCoordinate().getYCoordinate());
     }
 
+    /**
+     * Get the Field where the meeple stands on
+     *
+     * @return {@link Field} where the meeple stands on
+     */
     public Field getField() {
         return this.field;
     }
 
+    /**
+     * Checks if the meeple con move to a field
+     *
+     * @param map      The @{@link Map}
+     * @param newField The @{@link Field} where the meeple wants to move to
+     * @return True if the meeple can move to the {@link Field} <br>
+     * False if the meeple cannot move to the @{@link Field}
+     */
     public boolean canMove(Map map, Field newField) {
-        return getFieldsAround(map, this.getField()).contains(newField);
+        return getFieldsAround(map).contains(newField);
     }
 
+    /**
+     * Make damage on the meeple
+     *
+     * @param damage amount of shieldEnergy, the meeple should lose
+     * @return the rest of the shieldEnergy, the meeple has
+     */
     public int makeDamage(int damage) {
         if (damage < 0) {
             log.warn("Cannot make negative Damage!");
-            return this.hp;
+            return this.shieldEnergy;
         }
-        this.hp -= damage;
-        return this.hp;
+        this.shieldEnergy -= damage;
+        return this.shieldEnergy;
     }
 
-    public List<Field> getFieldsAround(Map map, Field field) {
+    /**
+     * Get the fields around the meeple
+     *
+     * @param map The @{@link Map}
+     * @return A List of @{@link Field}s around the meeple
+     */
+    public List<Field> getFieldsAround(Map map) {
         List<Field> returnList = new LinkedList<>();
         //right
-        int xCoordinate = field.getCoordinate().getXCoordinate();
-        int yCoordinate = field.getCoordinate().getYCoordinate();
+        int xCoordinate = this.field.getCoordinate().getXCoordinate();
+        int yCoordinate = this.field.getCoordinate().getYCoordinate();
         returnList.add(map.findCoordinate(xCoordinate + 1, yCoordinate));
         //left
         returnList.add(map.findCoordinate(xCoordinate - 1, yCoordinate));
@@ -96,8 +128,29 @@ public abstract class AbstractMeeple {
         return returnList;
     }
 
-    abstract public boolean move(Map map, Field newPos) throws HasAlreadyMovedException, SpaceStationCannotMoveException, CannotMoveException, CannotMoveButIAttackException, CannotMineException, CannotAttackOwnMeeplesException, StorageFullException;
+    /**
+     * Move a meeple to the new {@link Field} if possible
+     * @param map      The @{@link Map}
+     * @param newField the new Field where the meeple should move
+     * @return True if the meeple has moved <br>
+     * False if the meeple has not moved
+     * @throws SpaceStationCannotMoveException If the meeple is an SpaceStation it cannot move
+     * @throws HasAlreadyMovedException        If the meeple has already moved this round, it cannot move again
+     * @throws CannotMoveButIAttackException   If the meeple ({@link Starfighter}) has attack an other meeple, but don't destroy it. It cannot move, and cannot move again this round
+     * @throws CannotMoveException             The meeple cannot move to this point, but can move to another this round
+     * @throws StorageFullException            The meeple (@{@link Transporter}) cannot mine more energy, because the storage is full
+     * @throws CannotAttackOwnMeeplesException The meeple (@{@link Starfighter}) cannot attack own meeples, but can move to an other field this round
+     * @throws CannotMineException             The meeple (@{@link Transporter}) cannot mine here
+     */
+    abstract public boolean move(Map map, Field newField) throws HasAlreadyMovedException, SpaceStationCannotMoveException, CannotMoveException, CannotMoveButIAttackException, CannotMineException, CannotAttackOwnMeeplesException, StorageFullException;
 
+    /**
+     * Attack an other meeple on the Field
+     * @param pos {@link Field} where the other meeple stands on
+     * @throws CannotMoveException             The meeple cannot move to this point, but can move to another this round
+     * @throws CannotMoveButIAttackException   If the meeple ({@link Starfighter}) has attack an other meeple, but don't destroy it. It cannot move, and cannot move again this round
+     * @throws CannotAttackOwnMeeplesException The meeple (@{@link Starfighter}) cannot attack own meeples, but can move to an other field this round
+     */
     abstract public void attack(Field pos) throws CannotMoveException, CannotMoveButIAttackException, CannotAttackOwnMeeplesException;
 
     @Override

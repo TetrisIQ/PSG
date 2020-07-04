@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
+/**
+ * Configuration for Asteroids
+ */
 public class AsteroidConfig {
 
     private String name = "Asteroid";

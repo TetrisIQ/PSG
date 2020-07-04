@@ -5,6 +5,9 @@ import de.edu.game.model.AbstractMeeple;
 import de.edu.game.model.SpaceStation;
 import de.edu.game.model.Transporter;
 
+/**
+ * Response Object for the @{@link AbstractMeeple} <br> and @{@link Transporter}, @{@link de.edu.game.model.Starfighter}, @{@link de.edu.game.model.Asteroid}, @{@link SpaceStation}
+ */
 public class MeepleResponse {
 
     public int id;

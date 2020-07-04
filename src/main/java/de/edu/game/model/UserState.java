@@ -7,10 +7,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Model Class representing the state of the {@link User}
+ */
 @Entity
 @NoArgsConstructor
 public class UserState {
 
+
+    /**
+     * States of the {@link User}
+     */
     private enum UserStates {
         REGISTER, READY, MYTURN, WAITING, INVALID
     }
@@ -22,6 +29,10 @@ public class UserState {
     private UserStates state = UserStates.REGISTER;
 
 
+    /**
+     * Switch to next state of the user
+     * @return True if the change was successful
+     */
     public boolean nextState() {
         switch (this.state) {
             case REGISTER:
@@ -40,6 +51,10 @@ public class UserState {
         }
     }
 
+    /**
+     * Check if the user is in state MYTURN
+     * @return True if the user in on turn
+     */
     public boolean isMyturn() {
         return this.state.equals(UserStates.MYTURN);
     }

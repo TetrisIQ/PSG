@@ -8,7 +8,7 @@ import de.edu.game.exceptions.NotAuthorizedException;
 import de.edu.game.model.*;
 import de.edu.game.repositorys.GameRepository;
 import de.edu.game.repositorys.MapRepository;
-import jdk.nashorn.internal.objects.annotations.Setter;
+import de.edu.game.repositorys.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Controller for Administration
+ */
 @RestController
 @RequestMapping("/admin")
 @CrossOrigin(origins = "http://localhost:8080")
@@ -37,8 +40,18 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    /**
+     * Starts the Game
+     *
+     * @throws GameAlreadyStartedException When the game has already started
+     * @throws NotAuthorizedException      When the user has no privilege to use this endpoint
+     */
     @PutMapping("/start")
     @ResponseStatus(code = HttpStatus.OK)
+
     public void startGame() throws GameAlreadyStartedException, NotAuthorizedException {
         hasAuthority();
         try {
@@ -53,14 +66,18 @@ public class AdminController {
                 log.warn("Game is already started. Cannot start the Game");
                 throw new GameAlreadyStartedException();
             }
-        }catch (IndexOutOfBoundsException ex){
+        } catch (IndexOutOfBoundsException ex) {
             log.warn("No Player joined the Game game cannot Started");
             System.exit(-1);
         }
     }
 
-    //@GetMapping("/map")
-    public MapResponse getMap() throws NotAuthorizedException {
+    /**
+     * Get the hole map as Response Object
+     *
+     * @return A Response of the @{@link Map}
+     */
+    public MapResponse getMap() {
         try {
             Map map = mapRepository.getTheMap();
             return new MapResponse(map);
@@ -70,6 +87,12 @@ public class AdminController {
         }
     }
 
+    /**
+     * Get the hole map as Response Object, including an Update message
+     *
+     * @param message The update message
+     * @return A Response of the {@link Map}
+     */
     public MapResponse getMap(String message) {
         try {
             Map map = mapRepository.getTheMap();
@@ -80,7 +103,9 @@ public class AdminController {
         }
     }
 
-
+    /**
+     * Try to Spawn every 20 seconds new @{@link Asteroid} on the Map
+     */
     @Scheduled(fixedDelay = 20000) // every 20 seconds
     public void spawnAsteroids() {
         try {
@@ -97,21 +122,42 @@ public class AdminController {
     }
 
 
- //   @Scheduled(fixedDelay = 1000)
+    /**
+     * Test every second if one player has win <br>
+     * A player wins, if he is the only left player in the Game
+     */
+
+    @Scheduled(fixedDelay = 1000)
     private void testIfWin() {
-        List<User> users = gameRepository.getTheGame().getUsers();
-        if(users.size() == 1) {
+        Game game = gameRepository.getTheGame();
+        List<User> users = game.getUsers();
+        if (users.size() == 1 && game.getState().isGameStarted()) {
             // if there is only one player the game is over and the user has win the game
             log.info("#########################################################################");
             log.info(users.get(0).getUsername() + " win the Game");
             log.info("#########################################################################");
-            Game game = gameRepository.getTheGame();
             game.getState().nextState();
             gameRepository.save(game);
+            Thread.currentThread().interrupt();
         }
     }
 
+    @PostMapping("/debug")
+    public void debug() {
+        Game game = gameRepository.getTheGame();
+        game.getUsers().forEach(u -> u.getMeepleList().forEach(m -> m.setHasMoved(false)));
+        userRepository.saveAll(game.getUsers());
+        gameRepository.save(game);
 
+    }
+
+    /**
+     * Get Information about the hole Map, Used my the <a href="https://github.com/TetrisIQ/PSG-MapViewer">Map-Viewer</a>
+     *
+     * @return Result with the Response Object of the @{@link Map} if there is an update on it. <br>
+     * Or an Update after an Timeout of 100.000 millSec
+     * @throws NotAuthorizedException When the user has no privilege to use this endpoint
+     */
     @GetMapping("/map")
     public DeferredResult<MapResponse> getMapIfUpdates() throws NotAuthorizedException {
         hasAuthority();
@@ -136,7 +182,7 @@ public class AdminController {
      * This is a temporary workaround, until I get the Spring security annotations working <br>
      * This Throws en exception if the user has not the admin or root role
      *
-     * @throws NotAuthorizedException
+     * @throws NotAuthorizedException When the user has no privilege to use this endpoint
      */
     private void hasAuthority() throws NotAuthorizedException {
         Optional<User> user = userService.currentUser();

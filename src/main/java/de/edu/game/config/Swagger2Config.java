@@ -5,12 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.BasicAuth;
-import springfox.documentation.service.SecurityReference;
-import springfox.documentation.service.SecurityScheme;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.Contact;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -20,6 +15,9 @@ import java.util.Arrays;
 
 @Configuration
 @EnableSwagger2
+/**
+ * Configuration for the Swagger (SpringFox) API Documentation
+ */
 public class Swagger2Config {
 
 
@@ -39,6 +37,7 @@ public class Swagger2Config {
     /**
      * Defines witch endpoints need Authentications
      * For testing Regular expressions use: https://www.freeformatter.com/java-regex-tester.html
+     *
      * @return @{@link SecurityContext}
      */
     private SecurityContext actuatorSecurityContext() {
@@ -48,6 +47,10 @@ public class Swagger2Config {
                 .build();
     }
 
+    /**
+     * Define the Authentication schema
+     * @return @{@link SecurityScheme}
+     */
     private SecurityScheme basicAuthScheme() {
         return new BasicAuth("basicAuth");
     }
@@ -57,6 +60,10 @@ public class Swagger2Config {
     }
 
 
+    /**
+     * General information about the Project
+     * @return @{@link ApiInfo}
+     */
     private ApiInfo apiEndPointsInfo() {
         return new ApiInfoBuilder().title("A programmable space game (PSG)")
                 .description("Entwicklung eines Lernspiels für die Programmierausbildung")

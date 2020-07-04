@@ -5,6 +5,9 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
+/**
+ * Configuration for Transporter
+ */
 public class TransporterConfig extends MeepleConfig {
 
     private int maxStorage;

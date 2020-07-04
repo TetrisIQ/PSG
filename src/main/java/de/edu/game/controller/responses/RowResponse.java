@@ -5,6 +5,9 @@ import de.edu.game.model.Row;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Response Object for the @{@link Row}
+ */
 public class RowResponse {
 
     public List<FieldResponse> fields = new LinkedList<>();

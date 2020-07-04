@@ -8,6 +8,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Model Class for Rows on the {@link Map}
+ */
 @Entity(name = "rows") //row is an SQL key words
 @NoArgsConstructor
 @ToString

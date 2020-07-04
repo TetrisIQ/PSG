@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+/**
+ * Controller for handling UserRegistration and first Login
+ */
 @RestController
 @RequestMapping("/user")
 @Log4j2
@@ -38,13 +41,21 @@ public class UserController {
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     ;
 
+    /**
+     * First register a new {@link User}
+     *
+     * @param username The username
+     * @return An Response Object of the @{@link User} with an <b>random</b> password
+     * @throws UsernameTakenException      If the username already exists
+     * @throws GameAlreadyStartedException If the Game has already started
+     */
     @PostMapping("/register/{username}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Registration successful"),
             @ApiResponse(code = 226, message = "Invalid username")})
     public UserResponse register(@PathVariable String username) throws UsernameTakenException, GameAlreadyStartedException {
-        if(gameRepository.getTheGame().isGameStarted()) {
+        if (gameRepository.getTheGame().isGameStarted()) {
             throw new GameAlreadyStartedException();
         }
         String pw = StartupRunner.generateString();
@@ -58,6 +69,13 @@ public class UserController {
         }
     }
 
+    /**
+     * First login of the User
+     *
+     * @return An Response Object of the @{@link User} without the password
+     * @throws GameAlreadyStartedException If the Game has already started
+     * @throws UserNotFoundException       If the user has not register first
+     */
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/login")
     public UserResponse login() throws GameAlreadyStartedException, UserNotFoundException {
@@ -70,12 +88,18 @@ public class UserController {
         throw new UserNotFoundException("User Not found");
     }
 
+    /**
+     * Add a user to the @{@link Game}
+     *
+     * @param user The User who will be added
+     * @throws GameAlreadyStartedException If the Game has already started
+     */
     private void addUserToGame(User user) throws GameAlreadyStartedException {
         Game game = gameRepository.getTheGame();
         if (game.registerUser(user)) {
             gameRepository.save(game);
             log.info("{} ({}) joined the Game", user.getUsername(), user.getId());
-        } else  {
+        } else {
             // game is started, cannot Join a running Game
             throw new GameAlreadyStartedException();
         }

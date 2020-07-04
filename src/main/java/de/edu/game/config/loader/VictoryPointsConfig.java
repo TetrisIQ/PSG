@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
+/**
+ * Configuration for Victory Points
+ */
 public class VictoryPointsConfig {
 
     private int mining = 5;

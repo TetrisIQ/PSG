@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+/**
+ * Class witch will be called on startup of Spring Boot
+ */
 @Component
 @Log4j2
 public class StartupRunner implements CommandLineRunner {
@@ -27,8 +30,13 @@ public class StartupRunner implements CommandLineRunner {
     @Autowired
     private GameRepository gameRepository;
 
+    /**
+     * Creates an Admin {@link User} and the default {@link Game} <br>
+     *
+     * @param args Program arguments
+     */
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         //Same Root user for testing
         String pw = "123"; // TODO: use Random passowrd for admin account
         String user = "admin";
@@ -56,6 +64,11 @@ public class StartupRunner implements CommandLineRunner {
     }
 
 
+    /**
+     * Generate a random passwords, using the UUID Class
+     *
+     * @return a Random Password as String
+     */
     public static String generateString() {
         String uuid = UUID.randomUUID().toString();
         //return uuid.replace("-", "");

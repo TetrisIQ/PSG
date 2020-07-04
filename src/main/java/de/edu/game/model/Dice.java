@@ -4,6 +4,9 @@ import lombok.extern.java.Log;
 
 import java.util.Random;
 
+/**
+ * Model Class to represent dices
+ */
 @Log
 public class Dice {
 
@@ -13,6 +16,12 @@ public class Dice {
     private int amount = 1;
     private int extra = 0;
 
+    /**
+     * Create a dice with an initialisation string <br>
+     * The initialisation string points out the range for random numbers, from 1 to X
+     *
+     * @param initString <b>Examples:</b> "1d20+10", "2d40" od "100d100+1"
+     */
     public Dice(String initString) {
         initString = initString.toLowerCase().replace("w", "d");
         try {
@@ -24,11 +33,16 @@ public class Dice {
         try {
             this.extra = Integer.parseInt(initString.split("\\+")[1]);
         } catch (ArrayIndexOutOfBoundsException ex) {
-            // The pattern has ne +
+            // The pattern has no +
         }
 
     }
 
+    /**
+     * Throw the digital dice, and sum up the dots of it.
+     *
+     * @return a random integer based on the initialisation string
+     */
     public int throwDice() {
         return throwDices(this.amount) + extra;
     }

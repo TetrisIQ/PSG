@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * Model Class of a Field on the @{@link Map}
+ */
 @Entity
 @NoArgsConstructor
 @Getter
@@ -21,12 +24,10 @@ public class Field {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private AbstractMeeple meeple;
 
-    // #### Constructors
     public Field(int x, int y) {
         this.coordinate = new Coordinate(0, x, y);
     }
 
-    // #### Setter
     public void setMeeple(AbstractMeeple meeple) {
         this.meeple = meeple;
     }

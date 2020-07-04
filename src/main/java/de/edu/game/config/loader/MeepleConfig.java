@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
+/**
+ * Configuration for basic Meeples
+ */
 public class MeepleConfig {
 
 

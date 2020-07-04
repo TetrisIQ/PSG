@@ -10,6 +10,9 @@ import lombok.extern.log4j.Log4j2;
 import javax.persistence.*;
 import java.util.*;
 
+/**
+ * Model class containing the most Map logic
+ */
 @Entity
 @NoArgsConstructor
 @ToString
@@ -24,16 +27,17 @@ public class Map {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Row> rows = new ArrayList<>();
 
-    /*@ManyToMany
-   Benötigt private List<AbstractMeeple> meeples = new LinkedList<>();
-     */
-
     public Map(int rows, int columns) {
         for (int y = 0; y < rows; y++) {
             this.rows.add(new Row(y, columns));
         }
     }
 
+    /**
+     * Spawns Asteroids on empty random Fields on the Map
+     *
+     * @param amount the amount of Asteroids witch will Spawned
+     */
     public void spawnAsteroids(int amount) {
         for (int i = 0; i < amount; i++) {
             Field f = null;
@@ -49,7 +53,13 @@ public class Map {
 
     }
 
-
+    /**
+     * find a coordinate, and handel overflows
+     *
+     * @param x X Coordinate
+     * @param y Y Coordinate
+     * @return {@link Field} valid Field of the map
+     */
     public Field findCoordinate(int x, int y) {
         try {
             return rows.get(y).getFields().get(x);
@@ -94,6 +104,11 @@ public class Map {
         }
     }
 
+    /**
+     * Counts all Asteroids on Map
+     *
+     * @return the amount of Asteroids on Map
+     */
     public int countAllAsteroids() {
         int counter = 0;
         for (Row r : rows) {
@@ -106,12 +121,23 @@ public class Map {
         return counter;
     }
 
+    /**
+     * Get a random Field on Map
+     *
+     * @return a random @{@link Field}
+     */
     private Field getRandomField() {
         Random rand = new Random();
         Row row = this.rows.get(rand.nextInt(rows.size())); // get random row
         return row.getFields().get(rand.nextInt(row.getFields().size())); // get random field
     }
 
+    /**
+     * Get a random empty Field on Map
+     *
+     * @return A random empty {@link Field}
+     * @throws NoEmptyFieldsException If there are no Empty Fields on Map
+     */
     private Field getRandomEmptyField() throws NoEmptyFieldsException {
         final Set<Field> fields = new HashSet<>();
         Field field = getRandomField();
@@ -126,6 +152,11 @@ public class Map {
         return field;
     }
 
+    /**
+     * Counts all fields on map
+     *
+     * @return The amount of Fields on Map
+     */
     public int getFieldCount() {
         return rows.get(0).getFields().size() * rows.size();
     }
