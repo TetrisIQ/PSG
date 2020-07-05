@@ -82,8 +82,17 @@ public class Starfighter extends AbstractMeeple {
         // Exception for SpaceStations
         if (enemy.getName().equals(ConfigLoader.shared.getSpaceStation().getName())) {
             //A SpaceStations has no defence value, they cannot avoid damage
-            enemy.makeDamage(attack);
+            int spaceStationHp = enemy.makeDamage(attack);
             this.makeDamage(defence);
+            if(spaceStationHp <= 0) {
+                // SpaceStation is destroyed
+                this.getField().setEmpty();
+                pos.setMeeple(this);
+                this.setField(pos);
+                addPoints(enemy);
+                // remove all other meeple
+                enemy.getUser().removeAllMeeple();
+            }
         } else { // this should be the default case
             if (attack < defence) {
                 if (!(enemy.getName().equals(ConfigLoader.shared.getTransporter().getName()))) {

@@ -144,6 +144,9 @@ public class Game {
             //last player in list
             //Round finished
             this.roundCounter++; // increase roundCounter
+            //let the SpaceStation prod. Energy
+            users.forEach(user -> user.getSpaceStation().addEnergy(ConfigLoader.shared.getSpaceStationMineSpeed()));
+            //send messages to Map-Viewer if there are less then 10 Rounds
             if (this.maxRounds - this.roundCounter < 10) {
                 if (this.roundCounter <= 0) { // calculate winner
                     calculateWinner();

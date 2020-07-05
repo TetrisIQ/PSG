@@ -104,4 +104,9 @@ public class User {
     public void addPoints(int points) {
         this.victoryPoints += points;
     }
+
+    public void removeAllMeeple() {
+        meepleList.forEach(m -> m.getField().setEmpty());
+        meepleList.clear();
+    }
 }
