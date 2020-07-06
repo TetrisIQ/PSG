@@ -19,9 +19,9 @@ import java.util.UUID;
 public class StartupRunner implements CommandLineRunner {
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    private static final String pw = "123"; // TODO: use Random passowrd for admin account
-    private static final String user = "admin";
-    public static final User ADMIN = new User(0, "root", "none", encoder.encode(pw), user);
+    private static final String PASSWORD = generateString();
+    private static final String USERNAME = "admin";
+    public static final User ADMIN = new User(0, "root", "none", encoder.encode(PASSWORD), USERNAME);
     private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(StartupRunner.class);
 
     @Autowired
@@ -37,14 +37,8 @@ public class StartupRunner implements CommandLineRunner {
      */
     @Override
     public void run(String... args) {
-        //Same Root user for testing
-        String pw = "123"; // TODO: use Random passowrd for admin account
-        String user = "admin";
-        //Random Root User
-        //String pw = generateString();
-
         log.info("Root user     \t=> \t {}", ADMIN.getUsername());
-        log.info("Root password \t=> \t {}", pw);
+        log.info("Root password \t=> \t {}", PASSWORD);
         userRepository.save(ADMIN);
 
         // Create Default Game
@@ -71,8 +65,6 @@ public class StartupRunner implements CommandLineRunner {
      */
     public static String generateString() {
         String uuid = UUID.randomUUID().toString();
-        //return uuid.replace("-", "");
-        //TODO: Testing is easier if we return the same password
-        return "7b13984732384f60854f0fe451d01241";
+        return uuid.replace("-", "");
     }
 }
